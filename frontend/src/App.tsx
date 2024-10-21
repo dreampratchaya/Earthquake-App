@@ -23,7 +23,7 @@ const App: React.FC = () => {
   const [earthquakes, setEarthquakes] = useState<Earthquake[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [date, setDate] = useState<string>("2024-08-08");
+  const [date, setDate] = useState<string>(new Date().toISOString().split("T")[0]);
   const [animationKey, setAnimationKey] = useState(0);
   const mapRef = useRef<L.Map | null>(null);
 
@@ -54,11 +54,12 @@ const App: React.FC = () => {
     nextDay.setDate(nextDay.getDate() + 1);
     const formattedNextDay = nextDay.toISOString().split("T")[0];
 
-    const apiUrl = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${selectedDate}&endtime=${formattedNextDay}`;
+    // const apiUrl = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${selectedDate}&endtime=${formattedNextDay}`;
+    const apiUrl = `/api/earthquake?start=${selectedDate}&end=${formattedNextDay}`
 
     try {
       const response = await axios.get(apiUrl);
-      setEarthquakes(response.data.features || []);
+      setEarthquakes(response.data || []);
     } catch (err) {
       setError("Failed to fetch earthquake data.");
     } finally {
@@ -199,7 +200,7 @@ const App: React.FC = () => {
         >
           {earthquakes.map((earthquake) => (
           <Marker position={[earthquake.geometry.coordinates[1], earthquake.geometry.coordinates[0]]} icon={createCustomIcon(earthquake.properties.mag)} 
-          key={`${earthquake.id}`} magnitude={earthquake.properties.mag}
+          key={`${earthquake._id}`} magnitude={earthquake.properties.mag}
           >
             <Popup className="dark-popup">
               {earthquake.properties.place} <br /> {earthquake.geometry.coordinates[1]}, {earthquake.geometry.coordinates[0]} <br /> Magnitude: {earthquake.properties.mag} <br />

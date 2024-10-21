@@ -3,6 +3,7 @@ import path from 'path'
 import mongoose from 'mongoose'
 import axios from 'axios'
 import cron from 'node-cron';
+import cors from 'cors'
 import Earthquake from './models/earthquake.js'
 
 const app = express()
@@ -26,7 +27,7 @@ const dbSave = async (data) => {
     }
 }
 
-cron.schedule('*/5 * * * *', async () => {
+cron.schedule('*/10 * * * *', async () => {
     console.log('Running scheduled job: Fetching earthquake data...');
     try {
         const past30Days = new Date();
@@ -43,6 +44,7 @@ cron.schedule('*/5 * * * *', async () => {
 
 app.use(express.json());
 app.use(express.static(path.join('public')))
+app.use(cors())
 
 app.get('/api/earthquake', async (req, res) => {
     try {
