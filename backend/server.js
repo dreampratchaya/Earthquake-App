@@ -55,9 +55,11 @@ app.get('/api/earthquake', async (req, res) => {
         const respond = await axios.get(`https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${start}&endtime=${end}`)
         if (respond.data.features.length === 0) return res.json([])
         for (let data of respond.data.features) {
-            await dbSave(data)
+            const earthquake = new Earthquake(data)
+            earthquake.properties.datetime = new Date(data.properties.time)
+            await earthquake.save()
         }
-        const show = await Earthquake.find({})
+        const show = await Earthquake.find({ 'properties.datetime': { $gte: new Date(start).toISOString(), $lte: new Date(end).toISOString() } })
         res.json(show)
     } catch (error) {
         res.status(500).json({ error: `Error fetching earthquake data ${error}` })

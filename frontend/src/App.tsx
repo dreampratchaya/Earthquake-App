@@ -200,7 +200,7 @@ const App: React.FC = () => {
         >
           {earthquakes.map((earthquake) => (
           <Marker position={[earthquake.geometry.coordinates[1], earthquake.geometry.coordinates[0]]} icon={createCustomIcon(earthquake.properties.mag)} 
-          key={`${earthquake._id}`} magnitude={earthquake.properties.mag}
+          key={earthquake._id ? `${earthquake._id}` : `${crypto.randomUUID()}`} magnitude={earthquake.properties.mag}
           >
             <Popup className="dark-popup">
               {earthquake.properties.place} <br /> {earthquake.geometry.coordinates[1]}, {earthquake.geometry.coordinates[0]} <br /> Magnitude: {earthquake.properties.mag} <br />
