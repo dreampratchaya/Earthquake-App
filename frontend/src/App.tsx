@@ -1,17 +1,25 @@
-import React, { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
-import { MapContainer, TileLayer, Marker, Popup, LayersControl} from 'react-leaflet';
-import L, { marker } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  LayersControl,
+} from "react-leaflet";
+import L, { marker } from "leaflet";
+import "leaflet/dist/leaflet.css";
 import MarkerClusterGroup from "react-leaflet-cluster";
-import SearchInput from './SearchInput';
-import './earthquake-app-styles.css'
+import SearchInput from "./SearchInput";
+import EarthquakeLegend from "./EarthquakeLegend";
+import "./earthquake-app-styles.css";
 
 type Earthquake = {
   properties: {
     mag: number;
     place: string;
     time: number;
+    tsunami: boolean;
   };
   geometry: {
     coordinates: [number, number, number];
@@ -23,26 +31,47 @@ const App: React.FC = () => {
   const [earthquakes, setEarthquakes] = useState<Earthquake[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [date, setDate] = useState<string>(new Date().toISOString().split("T")[0]);
+  const [date, setDate] = useState<string>(
+    new Date().toISOString().split("T")[0]
+  );
   const [animationKey, setAnimationKey] = useState(0);
   const mapRef = useRef<L.Map | null>(null);
 
   // Custom icon for better visibility on dark background
   const createCustomIcon = (magnitude: number) => {
-    let pulseScale = 0
-    let colorScale1 = ''
-    let colorScale2 = ''
-    if(magnitude < 2.5) {pulseScale = 10; colorScale1 = 'rgb(74, 144, 226)'; colorScale2 = 'rgba(74, 144, 226, 0.2)'}
-    else if(magnitude >= 2.5 && magnitude < 5.4) {pulseScale = 15; colorScale1 = 'rgb(28, 162, 102)'; colorScale2 = 'rgba(28, 162, 102, 0.2)'}
-    else if(magnitude >= 5.4 && magnitude < 6.0) {pulseScale = 20; colorScale1 = 'rgb(248, 255, 82)'; colorScale2 = 'rgba(248, 255, 82, 0.2)'}
-    else if(magnitude >= 6.0 && magnitude < 7.0) {pulseScale = 25; colorScale1 = 'rgb(249, 128, 11)'; colorScale2 = 'rgba(249, 128, 11, 0.2)'}
-    else if(magnitude >= 7.0 && magnitude < 8.0) {pulseScale = 30; colorScale1 = 'rgb(255, 152, 16)'; colorScale2 = 'rgba(255, 152, 16, 0.2)'}
-    else if(magnitude > 8.0) {pulseScale = 35; colorScale1 = 'rgb(255, 3, 26)'; colorScale2 = 'rgba(255, 3, 26, 0.2)'}
+    let pulseScale = 0;
+    let colorScale1 = "";
+    let colorScale2 = "";
+    if (magnitude < 2.5) {
+      pulseScale = 10;
+      colorScale1 = "rgb(74, 144, 226)";
+      colorScale2 = "rgba(74, 144, 226, 0.2)";
+    } else if (magnitude >= 2.5 && magnitude < 5.4) {
+      pulseScale = 15;
+      colorScale1 = "rgb(28, 162, 102)";
+      colorScale2 = "rgba(28, 162, 102, 0.2)";
+    } else if (magnitude >= 5.4 && magnitude < 6.0) {
+      pulseScale = 20;
+      colorScale1 = "rgb(248, 255, 82)";
+      colorScale2 = "rgba(248, 255, 82, 0.2)";
+    } else if (magnitude >= 6.0 && magnitude < 7.0) {
+      pulseScale = 25;
+      colorScale1 = "rgb(249, 128, 11)";
+      colorScale2 = "rgba(249, 128, 11, 0.2)";
+    } else if (magnitude >= 7.0 && magnitude < 8.0) {
+      pulseScale = 30;
+      colorScale1 = "rgb(255, 152, 16)";
+      colorScale2 = "rgba(255, 152, 16, 0.2)";
+    } else if (magnitude > 8.0) {
+      pulseScale = 35;
+      colorScale1 = "rgb(255, 3, 26)";
+      colorScale2 = "rgba(255, 3, 26, 0.2)";
+    }
     return L.divIcon({
-      className: 'custom-div-icon',
+      className: "custom-div-icon",
       html: `<div class='marker-pin' style='--pulse-scale:${pulseScale}; --color-scale1:${colorScale1}; --color-scale2:${colorScale2};'></div>`,
       iconSize: [30, 30],
-      iconAnchor: [15, 15]
+      iconAnchor: [15, 15],
     });
   };
 
@@ -55,7 +84,7 @@ const App: React.FC = () => {
     const formattedNextDay = nextDay.toISOString().split("T")[0];
 
     // const apiUrl = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${selectedDate}&endtime=${formattedNextDay}`;
-    const apiUrl = `/api/earthquake?start=${selectedDate}&end=${formattedNextDay}`
+    const apiUrl = `/api/earthquake?start=${selectedDate}&end=${formattedNextDay}`;
 
     try {
       const response = await axios.get(apiUrl);
@@ -69,10 +98,10 @@ const App: React.FC = () => {
 
   useEffect(() => {
     // Apply dark mode styles to the whole page
-    document.body.style.backgroundColor = '#242424';
-    document.body.style.color = '#ffffff';
+    document.body.style.backgroundColor = "#242424";
+    document.body.style.color = "#ffffff";
     fetchEarthquakeData(date);
-    const style = document.createElement('style');
+    const style = document.createElement("style");
     style.textContent = `
     .marker-pin {
       width: 10px;
@@ -106,7 +135,7 @@ const App: React.FC = () => {
   useEffect(() => {
     // Trigger animation every 5 seconds
     const interval = setInterval(() => {
-      setAnimationKey(prev => prev + 1);
+      setAnimationKey((prev) => prev + 1);
     }, 5000);
     // return clearInterval(interval)
   }, []);
@@ -118,14 +147,22 @@ const App: React.FC = () => {
 
   const handleSearch = async (query: string) => {
     try {
-      const response = await axios.get(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`);
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          query
+        )}`
+      );
       if (response.data && response.data.length > 0) {
         const { lat, lon, addresstype } = response.data[0];
         const newCenter: [number, number] = [parseFloat(lat), parseFloat(lon)];
-        setError(null)
-        if(addresstype === 'country') {mapRef.current?.setView(newCenter, 5);}
-        else {mapRef.current?.setView(newCenter, 8);}
+        setError(null);
+        if (addresstype === "country") {
+          mapRef.current?.setView(newCenter, 5);
+        } else {
+          mapRef.current?.setView(newCenter, 8);
+        }
       } else {
+        setDate(new Date().toISOString().split("T")[0]);
         setError("Location not found");
       }
     } catch (err) {
@@ -134,12 +171,17 @@ const App: React.FC = () => {
   };
 
   return (
-
-    <div style={{ height: '100vh', width: '100%' }}>
-      <MapContainer center={[13.7669983, 100.5445685]} zoom={5} style={{ height: '99vh', width: '100%' }} worldCopyJump={true} ref={mapRef}>
+    <div style={{ height: "100vh", width: "100%" }}>
+      <MapContainer
+        center={[13.7669983, 100.5445685]}
+        zoom={5}
+        style={{ height: "99vh", width: "100%" }}
+        worldCopyJump={true}
+        ref={mapRef}
+      >
         <LayersControl position="topright">
           <LayersControl.BaseLayer name="CartoDB.DarkMatter" checked>
-          <TileLayer
+            <TileLayer
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
               maxZoom={15}
@@ -147,7 +189,7 @@ const App: React.FC = () => {
             />
           </LayersControl.BaseLayer>
           <LayersControl.BaseLayer name="OpenStreetMap.HOT">
-          <TileLayer
+            <TileLayer
               url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'
               maxZoom={15}
@@ -174,44 +216,74 @@ const App: React.FC = () => {
           </LayersControl.Overlay>
         </LayersControl>
         {loading ? (
-        <div className="loading-container">
-          <p className="loading-container-label">Loading...</p>
-        </div>
+          <div className="loading-container">
+            <p className="loading-container-label">Loading...</p>
+          </div>
         ) : error ? (
-        <div className="loading-container">
-          <p className="loading-container-label">{error}</p>
-        </div>
+          <div className="loading-container">
+            <p className="loading-container-label">{error}</p>
+          </div>
         ) : earthquakes.length === 0 ? (
-        <div className="loading-container">
-          <p className="loading-container-label">No earthquake data found for this date.</p>
-        </div>  
+          <div className="loading-container">
+            <p className="loading-container-label">
+              No earthquake data found for this date.
+            </p>
+          </div>
         ) : (
-          <MarkerClusterGroup chunkedLoading
-          maxClusterRadius={20}
-          showCoverageOnHover={false}
-          removeOutsideVisibleBounds={false}
-          chunkDelay={0}
-          chunkInterval={0}
-          iconCreateFunction={(cluster) => {
-            const childMarkers = cluster.getAllChildMarkers();
-            const maxMagnitude = Math.max(...childMarkers.map(marker => marker.options.magnitude));
-            return createCustomIcon(maxMagnitude);
-          }}
-        >
-          {earthquakes.map((earthquake) => (
-          <Marker position={[earthquake.geometry.coordinates[1], earthquake.geometry.coordinates[0]]} icon={createCustomIcon(earthquake.properties.mag)} 
-          key={earthquake._id ? `${earthquake._id}` : `${crypto.randomUUID()}`} magnitude={earthquake.properties.mag}
+          <MarkerClusterGroup
+            chunkedLoading
+            maxClusterRadius={20}
+            showCoverageOnHover={false}
+            removeOutsideVisibleBounds={false}
+            chunkDelay={0}
+            chunkInterval={0}
+            iconCreateFunction={(cluster) => {
+              const childMarkers = cluster.getAllChildMarkers();
+              const maxMagnitude = Math.max(
+                ...childMarkers.map((marker) => marker.options.magnitude)
+              );
+              return createCustomIcon(maxMagnitude);
+            }}
           >
-            <Popup className="dark-popup">
-              {earthquake.properties.place} <br /> {earthquake.geometry.coordinates[1]}, {earthquake.geometry.coordinates[0]} <br /> Magnitude: {earthquake.properties.mag} <br />
-              Tsunami: <span style={{color: earthquake.properties.tsunami ? 'red' : 'green', fontWeight:'bold'}}> {earthquake.properties.tsunami ? 'Yes' : 'No'}</span>
-            </Popup>
-          </Marker>
-          ))}
-      </MarkerClusterGroup>
-      )}
+            {earthquakes.map((earthquake) => (
+              <Marker
+                position={[
+                  earthquake.geometry.coordinates[1],
+                  earthquake.geometry.coordinates[0],
+                ]}
+                icon={createCustomIcon(earthquake.properties.mag)}
+                key={
+                  earthquake._id
+                    ? `${earthquake._id}`
+                    : `${crypto.randomUUID()}`
+                }
+                magnitude={earthquake.properties.mag}
+              >
+                <Popup className="dark-popup">
+                  {earthquake.properties.place} <br />{" "}
+                  {earthquake.geometry.coordinates[1]},{" "}
+                  {earthquake.geometry.coordinates[0]} <br /> Magnitude:{" "}
+                  {earthquake.properties.mag} <br />
+                  Tsunami:{" "}
+                  <span
+                    style={{
+                      color: earthquake.properties.tsunami ? "red" : "green",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {" "}
+                    {earthquake.properties.tsunami ? "Yes" : "No"}
+                  </span>
+                </Popup>
+              </Marker>
+            ))}
+          </MarkerClusterGroup>
+        )}
       </MapContainer>
       <SearchInput onSearch={handleSearch} />
+      <div className="EarthquakeLegend">
+        <EarthquakeLegend />
+      </div>
       <div className="date-input-container">
         <input
           type="date"

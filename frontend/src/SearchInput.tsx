@@ -1,24 +1,54 @@
 import { useState } from "react";
-const SearchInput: React.FC<{ onSearch: (query: string) => void }> = ({ onSearch }) => {
-    const [query, setQuery] = useState('');
-  
-    const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      onSearch(query);
-    };
-  
-    return (
-      <form onSubmit={handleSubmit} className="search-container">
-        <input
-          type="text"
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
+
+const SearchInput: React.FC<{ onSearch: (query: string) => void }> = ({
+  onSearch,
+}) => {
+  const [query, setQuery] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(query);
+    setQuery("");
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="search-container">
+      <ThemeProvider theme={darkTheme}>
+        <TextField
+          className="search-input"
+          id="outlined-basic"
+          label="Search location"
+          variant="outlined"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search location..."
-          className="search-input"
+          sx={{ borderRadius: "10px" }}
         />
-        <button type="submit" className="search-button">Search</button>
-      </form>
-    );
-  };
+        <Button
+          variant="outlined"
+          type="submit"
+          className="search-button"
+          sx={{
+            marginLeft: 2,
+            height: 55,
+            color: "white",
+            border: "0.1px solid rgba(255, 255, 255, 0.3)",
+            borderRadius: "10px",
+          }}
+        >
+          Search
+        </Button>
+      </ThemeProvider>
+    </form>
+  );
+};
 
 export default SearchInput;
