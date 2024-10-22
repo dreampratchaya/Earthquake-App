@@ -10,7 +10,7 @@ A web application for visualizing global earthquake data. Built with React, Reac
 - 💾 **MongoDB Backend:** Store and manage earthquake data efficiently.
 - 🚀 **Vite for Fast Development:** Optimized frontend with Vite.
 
-This project is ideal for researchers, students, and developers interested in seismic data and mapping. Contributions are welcome! 😊
+This project is ideal for researchers, students, and developers interested in seismic data and mapping.
 
 ---
 
