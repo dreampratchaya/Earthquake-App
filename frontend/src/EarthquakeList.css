@@ -1,0 +1,136 @@
+.earthquake-sidebar {
+  position: absolute;
+  left: 9px;
+  top: 90px;
+  bottom: 0;
+  width: 350px;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  padding: 10px;
+  overflow-y: auto;
+  color-scheme: dark;
+  border-radius: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+}
+
+.earthquake-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.earthquake-item {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.earthquake-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.earthquake-item-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.magnitude-indicator {
+  padding: 8px;
+  border-radius: 50%;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+}
+
+.earthquake-details {
+  flex: 1;
+}
+
+.location {
+  color: white;
+  font-weight: 500;
+  margin: 0;
+}
+
+.timestamp {
+  color: #a0a0a0;
+  font-size: 0.875rem;
+  margin: 4px 0 0 0;
+}
+
+.selected-earthquake-details {
+  padding: 20px;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #a0a0a0;
+  cursor: pointer;
+  padding: 8px 0;
+  margin-bottom: 16px;
+  font-size: 1rem;
+}
+
+.back-button:hover {
+  color: white;
+}
+
+.detail-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.detail-magnitude {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.detail-info h3 {
+  color: #a0a0a0;
+  font-size: 0.9rem;
+  margin: 15px 0 5px 0;
+}
+
+.detail-info p {
+  color: white;
+  margin: 0 0 10px 0;
+  font-size: 1rem;
+}
+
+.detail-info h3:first-child {
+  margin-top: 0;
+}

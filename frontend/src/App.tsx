@@ -12,6 +12,7 @@ import "leaflet/dist/leaflet.css";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import SearchInput from "./SearchInput";
 import EarthquakeLegend from "./EarthquakeLegend";
+import EarthquakeList from "./EarthquakeList";
 import "./earthquake-app-styles.css";
 
 type Earthquake = {
@@ -36,6 +37,7 @@ const App: React.FC = () => {
   );
   const [animationKey, setAnimationKey] = useState(0);
   const mapRef = useRef<L.Map | null>(null);
+  const [selectedEarthquake, setSelectedEarthquake] = useState(null);
 
   // Custom icon for better visibility on dark background
   const createCustomIcon = (magnitude: number) => {
@@ -259,6 +261,9 @@ const App: React.FC = () => {
                     : `${crypto.randomUUID()}`
                 }
                 magnitude={earthquake.properties.mag}
+                eventHandlers={{
+                  click: () => setSelectedEarthquake(earthquake),
+                }}
               >
                 <Popup className="dark-popup">
                   {earthquake.properties.place} <br />{" "}
@@ -285,6 +290,12 @@ const App: React.FC = () => {
       <div className="EarthquakeLegend">
         <EarthquakeLegend />
       </div>
+      <EarthquakeList
+        earthquakes={earthquakes}
+        mapRef={mapRef}
+        handleSelectedEarthquake={setSelectedEarthquake}
+        SelectedEarthquake={selectedEarthquake}
+      />
       <div className="date-input-container">
         <input
           type="date"

@@ -1,11 +1,10 @@
-import express from "express";
+import express, { response } from "express";
 import path from "path";
 import mongoose from "mongoose";
 import axios from "axios";
 import cron from "node-cron";
 import cors from "cors";
 import Earthquake from "./models/earthquake.js";
-import earthquake from "./models/earthquake.js";
 
 const app = express();
 
@@ -18,27 +17,25 @@ mongoose
     console.log(err);
   });
 
-const dbSave = async (data) => {
-  let datetime = data.properties.time;
-  let timeFind = await Earthquake.find({ "properties.time": datetime });
-  // timFine.length = 0 -> false, !timFine.length = 0 -> true
-  if (!timeFind.length || datetime !== timeFind[0].properties.time) {
-    const earthquake = new Earthquake(data);
-    earthquake.properties.datetime = new Date(data.properties.time);
-    await earthquake.save();
-  }
-};
-
-cron.schedule("*/10 * * * *", async () => {
-  console.log("Running scheduled job: Fetching earthquake data...");
+const fetchPastData = async (past) => {
   try {
-    const past30Days = new Date();
-    past30Days.setDate(past30Days.getDate() - 30);
-    const respond = await axios.get(
-      `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${
-        past30Days.toISOString().split("T")[0]
-      }&endtime=${new Date().toISOString().split("T")[0]}`
-    );
+    if (past) {
+      const past30Days = new Date();
+      past30Days.setDate(past30Days.getDate() - 30);
+      var respond = await axios.get(
+        `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${
+          past30Days.toISOString().split("T")[0]
+        }&endtime=${new Date().toISOString().split("T")[0]}`
+      );
+    } else {
+      const futureDay = new Date();
+      futureDay.setDate(futureDay.getDate() + 1);
+      var respond = await axios.get(
+        `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${
+          new Date().toISOString().split("T")[0]
+        }&endtime=${futureDay.toISOString().split("T")[0]}`
+      );
+    }
     if (respond.data.features.length === 0) return [];
     const eqCheck = respond.data.features.map((data) => data.properties.time);
     const existingEq = await Earthquake.find({
@@ -60,6 +57,16 @@ cron.schedule("*/10 * * * *", async () => {
   } catch (e) {
     console.error("Error fetching earthquake data:", error);
   }
+};
+
+cron.schedule("*/50 * * * *", async () => {
+  console.log("Running scheduled job 30 days: Fetching earthquake data...");
+  await fetchPastData(true);
+});
+
+cron.schedule("*/5 * * * *", async () => {
+  console.log("Running scheduled job 1 day: Fetching earthquake data...");
+  await fetchPastData(false);
 });
 
 app.use(express.json());
