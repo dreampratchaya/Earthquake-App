@@ -13,14 +13,14 @@
 }
 
 .legend-title {
-  font-size: 14px;
+  font-size: 16px;
   text-align: center;
   color: #cfcfcf;
 }
 
 .border-gray {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin: 10px -15px;
+  margin: 15px -15px;
   filter: drop-shadow(0 0 2em rgba(255, 255, 255, 0.1));
 }
 
@@ -36,7 +36,7 @@
   background: linear-gradient(
     to bottom,
     rgb(255, 3, 26),
-    rgb(255, 152, 16),
+    rgb(255, 92, 16),
     rgb(249, 128, 11),
     rgb(248, 255, 82),
     rgb(28, 162, 102),

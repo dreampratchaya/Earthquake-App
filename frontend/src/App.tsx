@@ -60,8 +60,8 @@ const App: React.FC = () => {
       colorScale2 = "rgba(249, 128, 11, 0.2)";
     } else if (magnitude >= 7.0 && magnitude < 8.0) {
       pulseScale = 30;
-      colorScale1 = "rgb(255, 152, 16)";
-      colorScale2 = "rgba(255, 152, 16, 0.2)";
+      colorScale1 = "rgb(255, 92, 16)";
+      colorScale2 = "rgba(255, 92, 16, 0.2)";
     } else if (magnitude > 8.0) {
       pulseScale = 35;
       colorScale1 = "rgb(255, 3, 26)";
@@ -141,8 +141,10 @@ const App: React.FC = () => {
   }, []);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(e.target.value);
-    fetchEarthquakeData(e.target.value);
+    if (!loading) {
+      setDate(e.target.value);
+      fetchEarthquakeData(e.target.value);
+    }
   };
 
   const handleSearch = async (query: string) => {
@@ -162,7 +164,6 @@ const App: React.FC = () => {
           mapRef.current?.setView(newCenter, 8);
         }
       } else {
-        setDate(new Date().toISOString().split("T")[0]);
         setError("Location not found");
       }
     } catch (err) {

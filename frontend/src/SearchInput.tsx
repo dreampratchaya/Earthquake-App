@@ -30,18 +30,25 @@ const SearchInput: React.FC<{ onSearch: (query: string) => void }> = ({
           variant="outlined"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          sx={{ borderRadius: "10px" }}
+          sx={{
+            "& label": { paddingLeft: (theme) => theme.spacing(2) },
+            "& input": { paddingLeft: (theme) => theme.spacing(3.5) },
+            "& fieldset": {
+              paddingLeft: (theme) => theme.spacing(2.5),
+              borderRadius: "25px",
+            },
+          }}
         />
         <Button
           variant="outlined"
           type="submit"
           className="search-button"
           sx={{
-            marginLeft: 2,
+            marginLeft: 1,
             height: 55,
             color: "white",
             border: "0.1px solid rgba(255, 255, 255, 0.3)",
-            borderRadius: "10px",
+            borderRadius: 7,
           }}
         >
           Search
