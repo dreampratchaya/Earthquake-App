@@ -50,7 +50,7 @@ const EarthquakeList: React.FC<{
 
               <h3>Time</h3>
               <p>
-                {new Date(SelectedEarthquake.properties.time).toISOString()}
+                {new Date(SelectedEarthquake.properties.time).toUTCString()}
               </p>
 
               <h3>Coordinates</h3>
@@ -126,7 +126,7 @@ const EarthquakeList: React.FC<{
                 <div className="earthquake-details">
                   <h3 className="location">{quake.properties.place}</h3>
                   <p className="timestamp">
-                    {new Date(quake.properties.time).toISOString()}
+                    {new Date(quake.properties.time).toUTCString()}
                   </p>
                 </div>
               </div>
