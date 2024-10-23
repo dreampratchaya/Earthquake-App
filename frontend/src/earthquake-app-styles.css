@@ -110,3 +110,31 @@
   right: 25px;
   z-index: 1000;
 }
+.auto-refresh-indicator {
+  position: absolute;
+  bottom: 280px;
+  right: 25px;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(0.5rem);
+  padding: 8px 12px;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+}
+
+.refresh-active {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+}

@@ -37,7 +37,9 @@ const App: React.FC = () => {
   );
   const [animationKey, setAnimationKey] = useState(0);
   const mapRef = useRef<L.Map | null>(null);
+  const intervalRef = useRef<number | null>(null);
   const [selectedEarthquake, setSelectedEarthquake] = useState(null);
+  const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
 
   // Custom icon for better visibility on dark background
   const createCustomIcon = (magnitude: number) => {
@@ -132,20 +134,37 @@ const App: React.FC = () => {
       }
     `;
     document.head.appendChild(style);
+    if (autoRefresh && isToday(date)) {
+      intervalRef.current = setInterval(() => {
+        fetchEarthquakeData(date);
+        console.log("auto refresh!");
+      }, 300000);
+    }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        console.log("Interval cleared!");
+      }
+    };
   }, [date]);
+
+  const isToday = (dateStr: string) => {
+    const today = new Date().toISOString().split("T")[0];
+    return dateStr === today;
+  };
 
   useEffect(() => {
     // Trigger animation every 5 seconds
     const interval = setInterval(() => {
       setAnimationKey((prev) => prev + 1);
     }, 5000);
-    // return clearInterval(interval)
   }, []);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!loading) {
       setDate(e.target.value);
       fetchEarthquakeData(e.target.value);
+      setAutoRefresh(isToday(e.target.value));
     }
   };
 
@@ -296,6 +315,18 @@ const App: React.FC = () => {
         handleSelectedEarthquake={setSelectedEarthquake}
         SelectedEarthquake={selectedEarthquake}
       />
+      <div className="auto-refresh-indicator">
+        {isToday(date) && autoRefresh ? (
+          <div className="refresh-active">
+            <span className="pulse-dot"></span>
+            <span style={{ color: "red" }}>Live</span> Data
+          </div>
+        ) : (
+          <div className="refresh-inactive">
+            <span style={{ color: "gray" }}>Offline</span> Data
+          </div>
+        )}
+      </div>
       <div className="date-input-container">
         <input
           type="date"

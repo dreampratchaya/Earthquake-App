@@ -59,7 +59,7 @@ const fetchPastData = async (past) => {
   }
 };
 
-cron.schedule("* */2 * * *", async () => {
+cron.schedule("0 */2 * * *", async () => {
   console.log("Running scheduled job 30 days: Fetching earthquake data...");
   await fetchPastData(true);
 });

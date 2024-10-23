@@ -1,4 +1,3 @@
-import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -172,7 +171,9 @@ const EarthquakeList: React.FC<{
       )}
       {!SelectedEarthquake && (
         <div className="earthquake-list">
-          <h2 className="sidebar-title">Earthquake Data</h2>
+          <h2 className="sidebar-title" style={{ paddingLeft: "10px" }}>
+            Earthquake Data
+          </h2>
           <ThemeProvider theme={darkTheme}>
             <FormControl
               fullWidth
