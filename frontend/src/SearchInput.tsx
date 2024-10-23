@@ -1,6 +1,8 @@
 import { useState } from "react";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import SearchIcon from "@mui/icons-material/Search";
+import { IconButton } from "@mui/material";
+import { InputAdornment } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const darkTheme = createTheme({
@@ -38,21 +40,23 @@ const SearchInput: React.FC<{ onSearch: (query: string) => void }> = ({
               borderRadius: "25px",
             },
           }}
-        />
-        <Button
-          variant="outlined"
-          type="submit"
-          className="search-button"
-          sx={{
-            marginLeft: 1,
-            height: 55,
-            color: "white",
-            border: "0.1px solid rgba(255, 255, 255, 0.3)",
-            borderRadius: 7,
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="Search"
+                    edge="end"
+                    type="submit"
+                    sx={{ marginRight: "-8px" }}
+                  >
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
           }}
-        >
-          Search
-        </Button>
+        />
       </ThemeProvider>
     </form>
   );

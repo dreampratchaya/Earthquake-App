@@ -3,8 +3,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
 import "./EarthquakeList.css";
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 const EarthquakeList: React.FC<{
   earthquakes: any;
   mapRef: any;
@@ -17,6 +19,7 @@ const EarthquakeList: React.FC<{
   SelectedEarthquake,
 }) => {
   const [sort, setSort] = useState("Newest");
+  const [localTime, setLocalTime] = useState(false);
   const darkTheme = createTheme({
     palette: {
       mode: "dark",
@@ -32,6 +35,9 @@ const EarthquakeList: React.FC<{
     sort === "Newest" ? sortedNewEarthquakes : sortedMagEarthquakes;
   const handleChange = (event: SelectChangeEvent) => {
     setSort(event.target.value as string);
+  };
+  const handleSwitch = (e: ChangeEvent<HTMLInputElement>) => {
+    setLocalTime(e.target.checked);
   };
   return (
     <div className="earthquake-sidebar">
@@ -95,9 +101,10 @@ const EarthquakeList: React.FC<{
                 Time
               </h3>
               <p>
-                {new Date(SelectedEarthquake.properties.time).toUTCString()}
+                {localTime
+                  ? new Date(SelectedEarthquake.properties.time).toString()
+                  : new Date(SelectedEarthquake.properties.time).toUTCString()}
               </p>
-              <p>{new Date(SelectedEarthquake.properties.time).toString()}</p>
 
               <h3>
                 <svg
@@ -171,10 +178,35 @@ const EarthquakeList: React.FC<{
       )}
       {!SelectedEarthquake && (
         <div className="earthquake-list">
-          <h2 className="sidebar-title" style={{ paddingLeft: "10px" }}>
-            Earthquake Data
-          </h2>
           <ThemeProvider theme={darkTheme}>
+            <span
+              style={{
+                margin: "1rem 0",
+                display: "flex",
+                gap: "12px",
+              }}
+            >
+              <h2
+                className="sidebar-title"
+                style={{ width: 200, paddingLeft: 5 }}
+              >
+                Earthquake Data
+              </h2>
+              <FormControlLabel
+                control={
+                  <Switch
+                    color="warning"
+                    checked={localTime}
+                    onChange={handleSwitch}
+                  />
+                }
+                label="Local Time"
+                sx={{
+                  paddingTop: "12px",
+                  width: 160,
+                }}
+              />
+            </span>
             <FormControl
               fullWidth
               sx={{
@@ -186,12 +218,14 @@ const EarthquakeList: React.FC<{
                 },
               }}
             >
-              <InputLabel id="demo-simple-select-label">Sort</InputLabel>
+              <InputLabel id="demo-simple-select-label">
+                Sort (UTC Time)
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={sort}
-                label="Sort"
+                label="Sort (UTC Time)"
                 onChange={handleChange}
               >
                 <MenuItem value="Newest">Newest First</MenuItem>
@@ -239,7 +273,9 @@ const EarthquakeList: React.FC<{
                 <div className="earthquake-details">
                   <h3 className="location">{quake.properties.place}</h3>
                   <p className="timestamp">
-                    {new Date(quake.properties.time).toUTCString()}
+                    {localTime
+                      ? new Date(quake.properties.time).toString().split("(")[0]
+                      : new Date(quake.properties.time).toUTCString()}
                   </p>
                 </div>
               </div>
