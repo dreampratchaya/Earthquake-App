@@ -31,7 +31,7 @@ const SearchInput: React.FC<{ onSearch: (query: string) => void }> = ({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           sx={{
-            "& label": { paddingLeft: (theme) => theme.spacing(2) },
+            "& label": { paddingLeft: (theme) => theme.spacing(2.25) },
             "& input": { paddingLeft: (theme) => theme.spacing(3.5) },
             "& fieldset": {
               paddingLeft: (theme) => theme.spacing(2.5),
