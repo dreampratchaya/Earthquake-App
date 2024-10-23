@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import {
   MapContainer,
@@ -79,26 +79,29 @@ const App: React.FC = () => {
     });
   };
 
-  const fetchEarthquakeData = async (selectedDate: string) => {
-    setLoading(true);
-    setError(null);
+  const fetchEarthquakeData = useCallback(
+    async (selectedDate: string) => {
+      autoRefresh ? setLoading(false) : setLoading(true);
+      setError(null);
 
-    const nextDay = new Date(selectedDate);
-    nextDay.setDate(nextDay.getDate() + 1);
-    const formattedNextDay = nextDay.toISOString().split("T")[0];
+      const nextDay = new Date(selectedDate);
+      nextDay.setDate(nextDay.getDate() + 1);
+      const formattedNextDay = nextDay.toISOString().split("T")[0];
 
-    // const apiUrl = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${selectedDate}&endtime=${formattedNextDay}`;
-    const apiUrl = `/api/earthquake?start=${selectedDate}&end=${formattedNextDay}`;
+      // const apiUrl = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${selectedDate}&endtime=${formattedNextDay}`;
+      const apiUrl = `/api/earthquake?start=${selectedDate}&end=${formattedNextDay}`;
 
-    try {
-      const response = await axios.get(apiUrl);
-      setEarthquakes(response.data || []);
-    } catch (err) {
-      setError("Failed to fetch earthquake data.");
-    } finally {
-      setLoading(false);
-    }
-  };
+      try {
+        const response = await axios.get(apiUrl);
+        setEarthquakes(response.data || []);
+      } catch (err) {
+        setError("Failed to fetch earthquake data.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [date]
+  );
 
   useEffect(() => {
     // Apply dark mode styles to the whole page
@@ -138,7 +141,7 @@ const App: React.FC = () => {
       intervalRef.current = setInterval(() => {
         fetchEarthquakeData(date);
         console.log("auto refresh!");
-      }, 300000);
+      }, 180000);
     }
     return () => {
       if (intervalRef.current) {
@@ -158,6 +161,8 @@ const App: React.FC = () => {
     const interval = setInterval(() => {
       setAnimationKey((prev) => prev + 1);
     }, 5000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -64,7 +64,7 @@ cron.schedule("0 */2 * * *", async () => {
   await fetchPastData(true);
 });
 
-cron.schedule("*/10 * * * *", async () => {
+cron.schedule("*/7 * * * *", async () => {
   console.log("Running scheduled job 1 day: Fetching earthquake data...");
   await fetchPastData(false);
 });
