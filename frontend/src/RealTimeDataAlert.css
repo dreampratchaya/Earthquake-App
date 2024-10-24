@@ -1,0 +1,17 @@
+.RealTimeDataAlert {
+  position: absolute;
+  top: 140px;
+  right: 10px;
+  z-index: 1000;
+  animation: fadeInRight 1s;
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+  }
+}

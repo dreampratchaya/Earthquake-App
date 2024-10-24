@@ -13,6 +13,13 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import SearchInput from "./SearchInput";
 import EarthquakeLegend from "./EarthquakeLegend";
 import EarthquakeList from "./EarthquakeList";
+import isEqual from "lodash/isEqual";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import AlertTitle from "@mui/material/AlertTitle";
+import SearchAlert from "./SearchAlert";
+import RealTimeDataAlert from "./RealTimeDataAlert";
 import "./earthquake-app-styles.css";
 
 type Earthquake = {
@@ -28,6 +35,12 @@ type Earthquake = {
   id: string;
 };
 
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
+
 const App: React.FC = () => {
   const [earthquakes, setEarthquakes] = useState<Earthquake[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,9 +50,13 @@ const App: React.FC = () => {
   );
   const [animationKey, setAnimationKey] = useState(0);
   const mapRef = useRef<L.Map | null>(null);
+  const previousDataRef = useRef(null);
   const intervalRef = useRef<number | null>(null);
   const [selectedEarthquake, setSelectedEarthquake] = useState(null);
   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
+  const [searchAlert, setSearchAlert] = useState({ open: false, message: "" });
+  const [realTimeAlert, setRealTimeAlert] = useState<boolean>(false);
+  const firstTimeRef = useRef(true);
 
   // Custom icon for better visibility on dark background
   const createCustomIcon = (magnitude: number) => {
@@ -81,7 +98,10 @@ const App: React.FC = () => {
 
   const fetchEarthquakeData = useCallback(
     async (selectedDate: string) => {
-      autoRefresh ? setLoading(false) : setLoading(true);
+      autoRefresh && !firstTimeRef.current
+        ? setLoading(false)
+        : setLoading(true);
+
       setError(null);
 
       const nextDay = new Date(selectedDate);
@@ -93,7 +113,13 @@ const App: React.FC = () => {
 
       try {
         const response = await axios.get(apiUrl);
-        setEarthquakes(response.data || []);
+        if (!isEqual(response.data, previousDataRef.current)) {
+          console.log("not equal!");
+          setEarthquakes(response.data || []);
+          autoRefresh && !firstTimeRef.current ? setRealTimeAlert(true) : null;
+          previousDataRef.current = response.data;
+          firstTimeRef.current = false;
+        }
       } catch (err) {
         setError("Failed to fetch earthquake data.");
       } finally {
@@ -141,7 +167,7 @@ const App: React.FC = () => {
       intervalRef.current = setInterval(() => {
         fetchEarthquakeData(date);
         console.log("auto refresh!");
-      }, 180000);
+      }, 120000);
     }
     return () => {
       if (intervalRef.current) {
@@ -170,6 +196,7 @@ const App: React.FC = () => {
       setDate(e.target.value);
       fetchEarthquakeData(e.target.value);
       setAutoRefresh(isToday(e.target.value));
+      firstTimeRef.current = true;
     }
   };
 
@@ -190,10 +217,10 @@ const App: React.FC = () => {
           mapRef.current?.setView(newCenter, 8);
         }
       } else {
-        setError("Location not found");
+        setSearchAlert({ open: true, message: "Location not found" });
       }
     } catch (err) {
-      setError("Error searching for location");
+      setSearchAlert({ open: true, message: "Error searching for location" });
     }
   };
 
@@ -244,18 +271,38 @@ const App: React.FC = () => {
         </LayersControl>
         {loading ? (
           <div className="loading-container">
-            <p className="loading-container-label">Loading...</p>
-          </div>
-        ) : error ? (
-          <div className="loading-container">
-            <p className="loading-container-label">{error}</p>
-          </div>
-        ) : earthquakes.length === 0 ? (
-          <div className="loading-container">
             <p className="loading-container-label">
-              No earthquake data found for this date.
+              Loading <CircularProgress />
             </p>
           </div>
+        ) : error ? (
+          <ThemeProvider theme={darkTheme}>
+            <Alert
+              severity="error"
+              className="loading-container"
+              sx={{ fontSize: 30, "& .MuiAlert-icon": { fontSize: "40px" } }}
+              variant="outlined"
+            >
+              <AlertTitle sx={{ fontSize: 35, fontWeight: "bold" }}>
+                Error
+              </AlertTitle>
+              {error}
+            </Alert>
+          </ThemeProvider>
+        ) : earthquakes.length === 0 ? (
+          <ThemeProvider theme={darkTheme}>
+            <Alert
+              severity="warning"
+              className="loading-container"
+              sx={{ fontSize: 30, "& .MuiAlert-icon": { fontSize: "40px" } }}
+              variant="outlined"
+            >
+              <AlertTitle sx={{ fontSize: 35, fontWeight: "bold" }}>
+                Warning
+              </AlertTitle>
+              No earthquake data found for this date.
+            </Alert>
+          </ThemeProvider>
         ) : (
           <MarkerClusterGroup
             chunkedLoading
@@ -319,6 +366,11 @@ const App: React.FC = () => {
         mapRef={mapRef}
         handleSelectedEarthquake={setSelectedEarthquake}
         SelectedEarthquake={selectedEarthquake}
+      />
+      <SearchAlert searchAlert={searchAlert} setSearchAlert={setSearchAlert} />
+      <RealTimeDataAlert
+        realTimeAlert={realTimeAlert}
+        handleSetrealTimeAlert={() => setRealTimeAlert(false)}
       />
       <div className="auto-refresh-indicator">
         {isToday(date) && autoRefresh ? (

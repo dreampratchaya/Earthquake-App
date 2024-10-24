@@ -9,8 +9,8 @@ import "./EarthquakeList.css";
 import { useState, ChangeEvent } from "react";
 const EarthquakeList: React.FC<{
   earthquakes: any;
-  mapRef: any;
-  handleSelectedEarthquake: any;
+  mapRef: React.MutableRefObject<L.Map | null>;
+  handleSelectedEarthquake: React.Dispatch<React.SetStateAction<null>>;
   SelectedEarthquake: any;
 }> = ({
   earthquakes,
