@@ -17,6 +17,7 @@ import isEqual from "lodash/isEqual";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material";
 import AlertTitle from "@mui/material/AlertTitle";
 import SearchAlert from "./SearchAlert";
 import RealTimeDataAlert from "./RealTimeDataAlert";
@@ -226,10 +227,11 @@ const App: React.FC = () => {
 
   return (
     <div style={{ height: "100vh", width: "100%" }}>
+      <CssBaseline />
       <MapContainer
         center={[13.7669983, 100.5445685]}
         zoom={5}
-        style={{ height: "99vh", width: "100%" }}
+        style={{ height: "100vh", width: "100%" }}
         worldCopyJump={true}
         ref={mapRef}
         zoomControl={false}

@@ -183,7 +183,7 @@ const EarthquakeList: React.FC<{
               style={{
                 margin: "1rem 0",
                 display: "flex",
-                gap: "12px",
+                gap: "10px",
               }}
             >
               <h2
@@ -203,7 +203,7 @@ const EarthquakeList: React.FC<{
                 label="Local Time"
                 sx={{
                   paddingTop: "12px",
-                  width: 160,
+                  width: 170,
                 }}
               />
             </span>
@@ -218,17 +218,15 @@ const EarthquakeList: React.FC<{
                 },
               }}
             >
-              <InputLabel id="demo-simple-select-label">
-                Sort (UTC Time)
-              </InputLabel>
+              <InputLabel id="demo-simple-select-label">Sort</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={sort}
-                label="Sort (UTC Time)"
+                label="Sort"
                 onChange={handleChange}
               >
-                <MenuItem value="Newest">Newest First</MenuItem>
+                <MenuItem value="Newest">Newest First (UTC Time)</MenuItem>
                 <MenuItem value="Magnitude">Magnitude</MenuItem>
               </Select>
             </FormControl>

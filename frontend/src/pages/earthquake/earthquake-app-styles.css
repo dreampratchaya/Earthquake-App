@@ -107,7 +107,7 @@
 .EarthquakeLegend {
   position: absolute;
   bottom: 30px;
-  right: 25px;
+  right: 20px;
   z-index: 1000;
 }
 .auto-refresh-indicator {
