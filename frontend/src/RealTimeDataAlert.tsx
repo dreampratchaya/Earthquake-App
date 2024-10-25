@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
 import { Alert, Collapse } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import "./RealTimeDataAlert.css";
+
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
 
 const RealTimeDataAlert: React.FC<{
   realTimeAlert: boolean;
@@ -14,12 +21,18 @@ const RealTimeDataAlert: React.FC<{
   }, [realTimeAlert]);
   return (
     <Collapse in={realTimeAlert}>
-      <Alert
-        className={realTimeAlert ? "RealTimeDataAlert" : ""}
-        sx={{ fontSize: 18, "& .MuiAlert-icon": { fontSize: "25px" } }}
-      >
-        New data is available!
-      </Alert>
+      <ThemeProvider theme={darkTheme}>
+        <Alert
+          className={realTimeAlert ? "RealTimeDataAlert" : ""}
+          sx={{
+            fontSize: 18,
+            "& .MuiAlert-icon": { fontSize: "25px" },
+            overflow: "hidden",
+          }}
+        >
+          New data is available!
+        </Alert>
+      </ThemeProvider>
     </Collapse>
   );
 };

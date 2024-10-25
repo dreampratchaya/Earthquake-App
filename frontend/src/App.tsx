@@ -32,7 +32,7 @@ type Earthquake = {
   geometry: {
     coordinates: [number, number, number];
   };
-  id: string;
+  _id: string;
 };
 
 const darkTheme = createTheme({
@@ -232,6 +232,7 @@ const App: React.FC = () => {
         style={{ height: "99vh", width: "100%" }}
         worldCopyJump={true}
         ref={mapRef}
+        zoomControl={false}
       >
         <LayersControl position="topright">
           <LayersControl.BaseLayer name="CartoDB.DarkMatter" checked>
@@ -311,10 +312,10 @@ const App: React.FC = () => {
             removeOutsideVisibleBounds={false}
             chunkDelay={0}
             chunkInterval={0}
-            iconCreateFunction={(cluster) => {
+            iconCreateFunction={(cluster: any) => {
               const childMarkers = cluster.getAllChildMarkers();
               const maxMagnitude = Math.max(
-                ...childMarkers.map((marker) => marker.options.magnitude)
+                ...childMarkers.map((marker: any) => marker.options.magnitude)
               );
               return createCustomIcon(maxMagnitude);
             }}
