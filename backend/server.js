@@ -62,7 +62,7 @@ const fetchPastData = async (past) => {
   }
 };
 
-// await fetchPastData(true);
+await fetchPastData(true);
 
 cron.schedule("0 */7 * * *", async () => {
   console.log("Running scheduled job 30 days: Fetching earthquake data...");
@@ -75,7 +75,7 @@ cron.schedule("*/7 * * * *", async () => {
 });
 
 app.use(express.json());
-app.use(express.static(path.join("public")));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
 app.get("/api/earthquake", async (req, res) => {
@@ -120,6 +120,10 @@ app.get("/api/earthquake", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: `Error fetching earthquake data ${error}` });
   }
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.listen(3000, () => {
