@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { CssBaseline, Button } from "@mui/material";
 import "./home.css";
-import earthquakeIcon from "../../../public/earthquake.svg";
+import earthquakeIcon from "../../assets/earthquake.svg";
 
 const Home: React.FC = () => {
   return (

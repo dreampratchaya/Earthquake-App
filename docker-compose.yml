@@ -1,0 +1,30 @@
+services:
+  app:
+    build:
+      context: .
+      target: backend  # Use the backend stage from multi-stage build
+    environment:
+      NODE_ENV: production
+      MONGO_URI: mongodb://mongo:27017/earthquake  # Internal MongoDB connection
+    ports:
+      - 8000:3000
+    depends_on:
+      - mongo
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  mongo:
+    image: mongo:8.0.3  # Official MongoDB image
+    volumes:
+      - mongo-data:/data/db  # Persistent storage
+    networks:
+      - app-network
+    restart: unless-stopped
+
+volumes:
+  mongo-data:  # Named volume for MongoDB data
+
+networks:
+  app-network:  # Custom internal network
+    driver: bridge

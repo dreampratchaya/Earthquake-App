@@ -8,8 +8,11 @@ import Earthquake from "./models/earthquake.js";
 
 const app = express();
 
+const mongoURI =
+  process.env.MONGO_URI || "mongodb://127.0.0.1:27017/earthquake";
+
 mongoose
-  .connect("mongodb://127.0.0.1:27017/earthquake")
+  .connect(mongoURI)
   .then(() => {
     console.log("Connection open");
   })
