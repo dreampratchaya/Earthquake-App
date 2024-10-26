@@ -6,8 +6,9 @@ import {
   Marker,
   Popup,
   LayersControl,
+  MarkerProps,
 } from "react-leaflet";
-import L, { marker } from "leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import SearchInput from "./SearchInput";
@@ -42,6 +43,23 @@ const darkTheme = createTheme({
   },
 });
 
+interface CustomMarkerProps extends MarkerProps {
+  magnitude: number;
+}
+
+const CustomMarker: React.FC<CustomMarkerProps> = ({
+  magnitude,
+  children,
+  ...props
+}) => {
+  const options = {
+    ...props,
+    magnitude: magnitude,
+  };
+
+  return <Marker {...options}>{children}</Marker>;
+};
+
 const App: React.FC = () => {
   const [earthquakes, setEarthquakes] = useState<Earthquake[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,11 +67,12 @@ const App: React.FC = () => {
   const [date, setDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   );
-  const [animationKey, setAnimationKey] = useState(0);
+  const [_, setAnimationKey] = useState(0);
   const mapRef = useRef<L.Map | null>(null);
   const previousDataRef = useRef(null);
   const intervalRef = useRef<number | null>(null);
-  const [selectedEarthquake, setSelectedEarthquake] = useState(null);
+  const [selectedEarthquake, setSelectedEarthquake] =
+    useState<Earthquake | null>(null);
   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
   const [searchAlert, setSearchAlert] = useState({ open: false, message: "" });
   const [realTimeAlert, setRealTimeAlert] = useState<boolean>(false);
@@ -317,13 +336,15 @@ const App: React.FC = () => {
             iconCreateFunction={(cluster: any) => {
               const childMarkers = cluster.getAllChildMarkers();
               const maxMagnitude = Math.max(
-                ...childMarkers.map((marker: any) => marker.options.magnitude)
+                ...childMarkers.map(
+                  (marker: any) => marker.options.magnitude || 0
+                )
               );
-              return createCustomIcon(maxMagnitude);
+              return createCustomIcon(maxMagnitude || 0);
             }}
           >
             {earthquakes.map((earthquake) => (
-              <Marker
+              <CustomMarker
                 position={[
                   earthquake.geometry.coordinates[1],
                   earthquake.geometry.coordinates[0],
@@ -355,7 +376,7 @@ const App: React.FC = () => {
                     {earthquake.properties.tsunami ? "Yes" : "No"}
                   </span>
                 </Popup>
-              </Marker>
+              </CustomMarker>
             ))}
           </MarkerClusterGroup>
         )}

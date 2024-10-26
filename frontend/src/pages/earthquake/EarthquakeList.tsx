@@ -7,10 +7,24 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import "./EarthquakeList.css";
 import { useState, ChangeEvent } from "react";
+type Earthquake = {
+  properties: {
+    mag: number;
+    place: string;
+    time: number;
+    tsunami: boolean;
+  };
+  geometry: {
+    coordinates: [number, number, number];
+  };
+  _id: string;
+};
 const EarthquakeList: React.FC<{
   earthquakes: any;
   mapRef: React.MutableRefObject<L.Map | null>;
-  handleSelectedEarthquake: React.Dispatch<React.SetStateAction<null>>;
+  handleSelectedEarthquake: React.Dispatch<
+    React.SetStateAction<Earthquake | null>
+  >;
   SelectedEarthquake: any;
 }> = ({
   earthquakes,
