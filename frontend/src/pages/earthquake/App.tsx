@@ -11,7 +11,6 @@ import {
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import MarkerClusterGroup from "react-leaflet-cluster";
-import SearchInput from "./SearchInput";
 import EarthquakeLegend from "./EarthquakeLegend";
 import EarthquakeList from "./EarthquakeList";
 import isEqual from "lodash/isEqual";
@@ -232,9 +231,9 @@ const App: React.FC = () => {
         const newCenter: [number, number] = [parseFloat(lat), parseFloat(lon)];
         setError(null);
         if (addresstype === "country") {
-          mapRef.current?.setView(newCenter, 5);
+          mapRef.current?.flyTo(newCenter, 5);
         } else {
-          mapRef.current?.setView(newCenter, 8);
+          mapRef.current?.flyTo(newCenter, 8);
         }
       } else {
         setSearchAlert({ open: true, message: "Location not found" });
@@ -381,7 +380,7 @@ const App: React.FC = () => {
           </MarkerClusterGroup>
         )}
       </MapContainer>
-      <SearchInput onSearch={handleSearch} />
+      {/* <SearchInput onSearch={handleSearch} /> */}
       <div className="EarthquakeLegend">
         <EarthquakeLegend />
       </div>
@@ -390,6 +389,7 @@ const App: React.FC = () => {
         mapRef={mapRef}
         handleSelectedEarthquake={setSelectedEarthquake}
         SelectedEarthquake={selectedEarthquake}
+        onSearch={handleSearch}
       />
       <SearchAlert searchAlert={searchAlert} setSearchAlert={setSearchAlert} />
       <RealTimeDataAlert

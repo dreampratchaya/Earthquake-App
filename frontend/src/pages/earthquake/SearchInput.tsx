@@ -1,4 +1,3 @@
-import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
 import { IconButton } from "@mui/material";
@@ -11,15 +10,14 @@ const darkTheme = createTheme({
   },
 });
 
-const SearchInput: React.FC<{ onSearch: (query: string) => void }> = ({
-  onSearch,
-}) => {
-  const [query, setQuery] = useState("");
-
+const SearchInput: React.FC<{
+  onSearch: (query: string) => void;
+  SetQuery: React.Dispatch<React.SetStateAction<string>>;
+  query: string;
+}> = ({ onSearch, SetQuery, query }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSearch(query);
-    setQuery("");
   };
 
   return (
@@ -31,7 +29,9 @@ const SearchInput: React.FC<{ onSearch: (query: string) => void }> = ({
           label="Search location"
           variant="outlined"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            SetQuery(e.target.value);
+          }}
           sx={{
             "& label": { paddingLeft: (theme) => theme.spacing(2.25) },
             "& input": { paddingLeft: (theme) => theme.spacing(3.5) },
