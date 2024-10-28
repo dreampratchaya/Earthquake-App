@@ -32,14 +32,14 @@
 .earthquake-item {
   padding: 12px;
   border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: all 0.2s ease;
   border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .earthquake-item:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
   border-color: #646cff;
   filter: drop-shadow(0 0 0.5em #646cffaa);
 }
@@ -53,8 +53,8 @@
 .magnitude-indicator {
   padding: 8px;
   border-radius: 50%;
-  min-width: 36px;
-  height: 36px;
+  min-width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -24,5 +24,27 @@
 .NotFoundCenter h1 {
   color: white;
   font-size: 10em;
-  text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+  animation: flicker 1.5s infinite alternate;
+}
+
+@keyframes flicker {
+  0%,
+  18%,
+  22%,
+  25%,
+  53%,
+  57%,
+  100% {
+    text-shadow: 0 0 7px rgba(255, 255, 255, 0.7),
+      0 0 10px rgba(255, 255, 255, 0.7), 0 0 21px rgba(255, 255, 255, 0.7),
+      0 0 42px rgba(249, 128, 11, 0.7), 0 0 82px rgba(249, 128, 11, 0.7),
+      0 0 92px rgba(249, 128, 11, 0.7), 0 0 102px rgba(249, 128, 11, 0.7),
+      0 0 151px rgba(249, 128, 11, 0.7);
+  }
+
+  20%,
+  24%,
+  55% {
+    text-shadow: none;
+  }
 }
