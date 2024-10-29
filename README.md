@@ -52,7 +52,7 @@
    ตรวจสอบให้แน่ใจว่าไฟล์ `docker-compose.yml` ของท่าน config ได้อย่างถูกต้องเพื่อให้ทำงานได้อย่างถูกต้องดังนี้: 
 
    ```yaml
-     services:
+   services:
     app:
       build:
         context: .
@@ -61,13 +61,13 @@
         NODE_ENV: production
         MONGO_URI: mongodb://mongo:27017/earthquake  # Internal MongoDB connection
       ports:
-        - 8000:3000
+        - 80:3000
       depends_on:
         - mongo
       networks:
         - app-network
       restart: unless-stopped
-  
+   
     mongo:
       image: mongo:8.0.3
       volumes:
@@ -75,7 +75,7 @@
       networks:
         - app-network
       restart: unless-stopped
-  
+   
     volumes:
       mongo-data:
     
@@ -87,7 +87,7 @@
 
 
 3. **Run the Application**:  
-   เข้าไปใน project directory และ command นี้ 
+   เข้าไปใน project directory และใช้ command นี้ 
    ```bash
    docker-compose up
    ```
