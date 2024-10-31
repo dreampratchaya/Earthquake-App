@@ -1,7 +1,7 @@
 .Home {
   height: 100vh;
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("https://cdn.theatlantic.com/thumbor/-_lpCtK6JuTLaBvBKT_7DWV8Xvk=/1500x1000/media/img/photo/2024/01/japan-earthquake-tk-1/a08_AP24002415383657/original.jpg");
+    url("https://res.cloudinary.com/dhfebya3l/image/upload/v1730347994/original_or6cxc.avif");
   background-size: cover;
   background-position: center;
   text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
