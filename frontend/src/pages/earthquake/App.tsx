@@ -133,7 +133,6 @@ const App: React.FC = () => {
       try {
         const response = await axios.get(apiUrl);
         if (!isEqual(response.data, previousDataRef.current)) {
-          console.log("not equal!");
           setEarthquakes(response.data || []);
           autoRefresh && !firstTimeRef.current ? setRealTimeAlert(true) : null;
           previousDataRef.current = response.data;
@@ -185,13 +184,11 @@ const App: React.FC = () => {
     if (autoRefresh && isToday(date)) {
       intervalRef.current = setInterval(() => {
         fetchEarthquakeData(date);
-        console.log("auto refresh!");
       }, 120000);
     }
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
-        console.log("Interval cleared!");
       }
     };
   }, [date]);
