@@ -73,7 +73,11 @@ const App: React.FC = () => {
   const [selectedEarthquake, setSelectedEarthquake] =
     useState<Earthquake | null>(null);
   const [autoRefresh, setAutoRefresh] = useState<boolean>(true);
-  const [searchAlert, setSearchAlert] = useState({ open: false, message: "" });
+  const [searchAlert, setSearchAlert] = useState({
+    open: false,
+    message: "",
+    type: "",
+  });
   const [realTimeAlert, setRealTimeAlert] = useState<boolean>(false);
   const firstTimeRef = useRef(true);
 
@@ -233,10 +237,18 @@ const App: React.FC = () => {
           mapRef.current?.flyTo(newCenter, 8);
         }
       } else {
-        setSearchAlert({ open: true, message: "Location not found" });
+        setSearchAlert({
+          open: true,
+          message: "Location not found",
+          type: "info",
+        });
       }
     } catch (err) {
-      setSearchAlert({ open: true, message: "Error searching for location" });
+      setSearchAlert({
+        open: true,
+        message: "Error searching for location",
+        type: "error",
+      });
     }
   };
 
@@ -257,7 +269,7 @@ const App: React.FC = () => {
               url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
               maxZoom={15}
-              minZoom={4.5}
+              minZoom={4}
             />
           </LayersControl.BaseLayer>
           <LayersControl.BaseLayer name="OpenStreetMap.HOT">
@@ -265,15 +277,15 @@ const App: React.FC = () => {
               url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'
               maxZoom={15}
-              minZoom={4.5}
+              minZoom={4}
             />
           </LayersControl.BaseLayer>
-          <LayersControl.Overlay name="Plate Boundaries" checked>
+          <LayersControl.Overlay name="Plate Boundaries">
             <TileLayer
               url="https://earthquake.usgs.gov/basemap/tiles/plates/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.usgs.gov/">USGS</a>'
               maxZoom={15}
-              minZoom={4.5}
+              minZoom={4}
               className="leaflet-layer-ring-of-fire"
             />
           </LayersControl.Overlay>
@@ -282,7 +294,7 @@ const App: React.FC = () => {
               url="https://earthquake.usgs.gov/arcgis/rest/services/eq/pager_landscan2018bin/MapServer/tile/{z}/{y}/{x}"
               attribution='&copy; <a href="https://www.usgs.gov/">USGS</a>'
               maxZoom={15}
-              minZoom={4.5}
+              minZoom={4}
               className="leaflet-layer-population-density"
             />
           </LayersControl.Overlay>
@@ -310,14 +322,11 @@ const App: React.FC = () => {
         ) : earthquakes.length === 0 ? (
           <ThemeProvider theme={darkTheme}>
             <Alert
-              severity="warning"
+              severity="info"
               className="loading-container"
               sx={{ fontSize: 30, "& .MuiAlert-icon": { fontSize: "40px" } }}
               variant="outlined"
             >
-              <AlertTitle sx={{ fontSize: 35, fontWeight: "bold" }}>
-                Warning
-              </AlertTitle>
               No earthquake data found for this date.
             </Alert>
           </ThemeProvider>

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Alert, AlertTitle, Collapse } from "@mui/material";
+import { Alert, Collapse } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 const darkTheme = createTheme({
@@ -12,19 +12,23 @@ const SearchAlert: React.FC<{
   searchAlert: {
     open: boolean;
     message: string;
+    type: any;
   };
   setSearchAlert: React.Dispatch<
     React.SetStateAction<{
       open: boolean;
       message: string;
+      type: string;
     }>
   >;
 }> = ({ searchAlert, setSearchAlert }) => {
   const handleSetSearchAlert = () => {
-    setSearchAlert((prev: { open: boolean; message: string }) => ({
-      ...prev,
-      open: false,
-    }));
+    setSearchAlert(
+      (prev: { open: boolean; message: string; type: string }) => ({
+        ...prev,
+        open: false,
+      })
+    );
   };
   useEffect(() => {
     if (searchAlert.open) {
@@ -36,14 +40,11 @@ const SearchAlert: React.FC<{
     <Collapse in={searchAlert.open}>
       <ThemeProvider theme={darkTheme}>
         <Alert
-          severity="warning"
+          severity={searchAlert.type}
           className="loading-container"
           sx={{ fontSize: 30, "& .MuiAlert-icon": { fontSize: "40px" } }}
           variant="outlined"
         >
-          <AlertTitle sx={{ fontSize: 35, fontWeight: "bold" }}>
-            Warning
-          </AlertTitle>
           {searchAlert.message}
         </Alert>
       </ThemeProvider>
