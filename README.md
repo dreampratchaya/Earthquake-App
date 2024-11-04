@@ -27,6 +27,15 @@
 4. **Real-Time Data Updates**:  
    - ดึงและแสดงข้อมูลแผ่นดินไหวใกล้เคียง real-time โดยการใช้ `useEffect` ใน React ในการเรียก API
 
+5. **Leveraging React-Leaflet for Mapping**  
+   - **How React-Leaflet Works**: React-Leaflet เป็น library ที่ทำให้เราสามารถเรียกใช้ library Leaflet ในรูปแบบ components ของ React ได้ โดย Leaflet เป็น library ที่แสดง map จาก OpenStreetMap ซึ่งเป็น open source มาแสดงผลได้ ฟีเจอร์ของ Leaflet อย่าง `<MapContainer>` จะเป็นตัวกำหนดว่า map จะแสดงผลตรงไหน และ `<Marker>` จะให้เราสามารถนำ marker ไปไว้จุดที่เราต้องการบน map ได้ รวมถึงเมื่อใช้ร่วมกับ `CustomIcon` จะทำให้เราสามารถออกแบบ marker ได้เองโดยใช้ css หรือ svg
+   - **Advantages**:
+     - *Declarative Mapping*: React-Leaflet ช่วยให้สามารถจัดการกับ map ได้ง่ายขึ้น รวมถึงเมื่อมีข้อมูลใหม่หรือมีการเปลี่ยนแปลงเข้ามาตัว map ก็จะ update ตัวเองได้ทันที ทำให้ user รู้สึกลื่นไหลในการใช้งาน
+     - *Customization*: สามารถกำหนด จัดการและตกแต่ง Marker ได้อย่างอิสระเพื่อให้ Marker มีความหลากหลายและเพิ่มประสบการณ์ใช้งานของ user ขึ้น
+   - **Development Approach**:
+     - `<MapContainer>` จะเป็น layer ที่เป็นข้อมูลพื้นฐานที่แผนที่ควรมี
+     - `<Marker>` และ `<Popup>` จะแสดงข้อมูลสถานที่เกิดแผ่นดินไหวในรูปแบบของ วงกลมและมีคลื่นล้อมรอบ ในตำแหน่งที่เกิดแผ่นดินไหว โดย วงกลมและคลื่นล้อมรอบ จะแตกต่างกันไปตามขนาดความรุนแรงของแผ่นดินไหว และเมื่อ click ที่จุดที่เกิดแผ่นดินไหวก็จะแสดงข้อมูลของแผ่นดินไหวทั้งหมด
+
 ---
 
 ## Important APIs  
@@ -120,6 +129,8 @@
 
 This project is licensed under the MIT License.
 
-application นี้เป็นส่วนหนึ่งของวิชา CT648 Web and Cloud Engineering
-66130423 ปราชญา ป้องกัน
-
+application นี้เป็นส่วนหนึ่งของวิชา CT648 Web and Cloud Engineering <br>
+วิศวกรรมศาสตรมหาบัณฑิต สาขาวิชาวิศวกรรมคอมพิวเตอร์ มหาวิทยาลัยธุรกิจบัณฑิตย์ (Master of Engineering Program in Computer Engineering, Dhurakij Pundit University) <br>
+66130423 ปราชญา ป้องกัน <br>
+อาจารย์ที่ปรึกษา ผศ.ดร.ชัยพร เขมะภาตะพันธ์ <br>
+![CITE](https://cite.dpu.ac.th/img/logo-cite-edit.jpg?t=1)
