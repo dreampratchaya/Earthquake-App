@@ -77,9 +77,9 @@
    หลังจากทำการ Vite build เสร็จไฟล์ที่ได้ก็จะไปอยู่ใน folder `dist` รอส่งต่อให้ backend ดำเนินการขั้นต่อไป
 
 **Backend (Express and Static File Serving)**  
-   backend จะใช้ Express.js ร่วมกับ bun เพื่อให้บริการ API และ ไฟล์ที่ผ่านการ build จาก frontend
-    - ทำการติดตั้ง dependencies ที่จำเป็นทั้งหมด
-    - นำไฟล์ที่ได้จากการ build ของ frontend มาใส่ใน folder public ของ backend เพื่อให้สามารถนำไฟล์มาใช้งานได้
+   backend จะใช้ Express.js ร่วมกับ bun เพื่อให้บริการ API และ ไฟล์ที่ผ่านการ build จาก frontend :
+      - ทำการติดตั้ง dependencies ที่จำเป็นทั้งหมด
+      - นำไฟล์ที่ได้จากการ build ของ frontend มาใส่ใน folder public ของ backend เพื่อให้สามารถนำไฟล์มาใช้งานได้
    
    **Dockerfile Excerpt for Backend Setup**:
    ```dockerfile
