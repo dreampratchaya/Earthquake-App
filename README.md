@@ -52,6 +52,55 @@
 
 ## Deployment Methods  
 
+### Docker Multi-Stage Build Explained
+
+1. **Frontend (Vite Build)**  
+   frontend จะใช้วิธี Vite build เพื่อทำการเปลี่ยนจาก tsx เป็น js ปกติเพื่อให้ browser ทั่วไปสามารถเข้าใจได้ :
+    - ทำการ copyไฟล์ package.json ( และ package-lock.json หรือ bun.lockb ถ้ามี) และ ทำการติดตั้ง dependencies โดยเหตุผลที่ไม่ทำการ copy ไฟล์ทั้งหมดแล้วติดตั้ง dependencies เพราะ Docker จะทำ layer caching เมื่อไฟล์เปลี่ยนแปลงไป วิธีนี้จะเป็นการ optimize Docker layer caching ซึ่งทำให้ สามารถ build ได้เร็วขึ้นอย่างมีนัยสําคัญ
+    
+   **Dockerfile Excerpt for Frontend Build**:
+   ```dockerfile
+   # Stage 1: Build the Vite frontend
+   FROM oven/bun AS frontend-builder
+
+   WORKDIR /app/frontend
+
+   # Install frontend dependencies
+   COPY frontend/package.json ./
+   RUN bun install
+
+   # Copy all frontend files and build the static files
+   COPY frontend/ .
+   RUN bun run build
+   ```
+
+   หลังจากทำการ Vite build เสร็จไฟล์ที่ได้ก็จะไปอยู่ใน folder `dist` รอส่งต่อให้ backend ดำเนินการขั้นต่อไป
+
+**Backend (Express and Static File Serving)**  
+   backend จะใช้ Express.js ร่วมกับ bun เพื่อให้บริการ API และ ไฟล์ที่ผ่านการ build จาก frontend
+    - ทำการติดตั้ง dependencies ที่จำเป็นทั้งหมด
+    - นำไฟล์ที่ได้จากการ build ของ frontend มาใส่ใน folder public ของ backend เพื่อให้สามารถนำไฟล์มาใช้งานได้
+   
+   **Dockerfile Excerpt for Backend Setup**:
+   ```dockerfile
+   # Stage 2: Set up the Express backend and bundle the Vite build
+   FROM oven/bun AS backend
+
+   WORKDIR /app
+
+   # Install backend dependencies for production
+   COPY backend/package.json backend/package-lock.json ./
+   RUN bun install --production
+
+   # Copy backend code and built frontend assets
+   COPY backend/ .
+   COPY --from=frontend-builder /app/frontend/dist ./public
+
+   # Expose port and set the start command
+   EXPOSE 3000
+   CMD ["bun", "server.js"]
+   ```
+
 ### Using Docker Compose   
 
 1. **Setup Docker Compose**:  
@@ -133,4 +182,4 @@ application นี้เป็นส่วนหนึ่งของวิช�
 วิศวกรรมศาสตรมหาบัณฑิต สาขาวิชาวิศวกรรมคอมพิวเตอร์ มหาวิทยาลัยธุรกิจบัณฑิตย์ (Master of Engineering Program in Computer Engineering, Dhurakij Pundit University) <br>
 66130423 ปราชญา ป้องกัน <br>
 อาจารย์ที่ปรึกษา ผศ.ดร.ชัยพร เขมะภาตะพันธ์ <br>
-![CITE](https://cite.dpu.ac.th/img/logo-cite-edit.jpg?t=1)
+<img src="https://cite.dpu.ac.th/img/logo-cite-edit.jpg?t=1" alt="CITE" width="180" height="125" />
