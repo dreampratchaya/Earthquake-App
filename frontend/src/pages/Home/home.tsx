@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { CssBaseline, Button } from "@mui/material";
 import "./home.css";
-import earthquakeIcon from "../../assets/earthquake.svg";
 
 const Home: React.FC = () => {
   return (
@@ -11,14 +10,15 @@ const Home: React.FC = () => {
       <div className="Home">
         <div className="HomeCenter">
           <nav className="HomeNav">
-            <img src={earthquakeIcon} alt="" />
-            <h4>Earthquake</h4>
             <Link to="/" className="HomeLink active">
               Home{" "}
             </Link>
             <Link to="/live" className="HomeLink">
               Live map{" "}
             </Link>
+            <a href="/about" className="HomeLink">
+              About
+            </a>
           </nav>
           <h2 style={{ fontSize: "4em" }}>Real-Time Earthquake Monitoring</h2>
           <p className="EqDes">
