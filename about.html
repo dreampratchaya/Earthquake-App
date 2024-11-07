@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="about.css" />
+    <title>About</title>
+  </head>
+  <body>
+    <div class="aboutCenter">
+      <nav class="homeNav">
+        <a href="/" class="homeLink"> Home </a>
+        <a href="/live" class="homeLink"> Live map </a>
+        <a href="/about" class="homeLink active"> About </a>
+      </nav>
+    </div>
+    <div class="container">
+      <h1>Earthquake Web App</h1>
+      <hr />
+      <p>
+        เว็บแอปพลิเคชันแบบ real-time
+        ที่จะแสดงข้อมูลแผ่นดินไหวและข้อมูลสำคัญอีกหลายอย่าง เช่น สึนามิ
+        บนแผนที่แบบ interactive รวมถึงสามารถดูข้อมูลย้อนหลังในแต่ละวันได้
+      </p>
+      <img src="./USGS Earthquake API.png" width="800" height="370" alt="" />
+      <h2>Table of Contents</h2>
+      <ul>
+        <li><a href="#development-principles">Development Principles</a></li>
+        <li><a href="#important-apis">Important APIs</a></li>
+        <li><a href="#deployment-methods">Deployment Methods</a></li>
+        <li><a href="#technologies-used">Technologies Used</a></li>
+        <li><a href="#license">License</a></li>
+      </ul>
+      <h2 id="development-principles">Development Principles</h2>
+      <hr />
+      <h3>1.User-Centric Design:</h3>
+      <ul class="ul-body">
+        <li class="li-body">
+          User จะได้รับประสบการณ์การใช้งานที่ราบรื่นด้วยด้วย UI จาก React
+          และแผนที่จาก Leaflet ทำให้ user
+          สามารถเข้าถึงข้อมูลสำคัญของแผนดินไหวได้ง่าย เช่น แผนดินไหวเกิดที่ไหน
+          เกิดเวลาเท่าไร มีแจ้งเตือนสึนามิหรือไม่
+        </li>
+      </ul>
+      <h3>2.Performance Optimization:</h3>
+      <ul class="ul-body">
+        <li class="li-body">
+          ใช้ bun ในการการประมวลผลฝั่ง server เพื่อเพิ่มความเร็วและลด latency
+          ในการตอบโต้กับ user
+        </li>
+        <li class="li-body">
+          ใช้วิธีการเก็บข้อมูลลง database แบบ batch data operations (insertMany)
+          เพื่อเพิ่มประสิทธิภาพในการเขียนข้อมูลลงใน MongoDB
+        </li>
+      </ul>
+      <h3>3.Scalability and Maintainability:</h3>
+      <ul class="ul-body">
+        <li class="li-body">
+          แบ่งส่วนต่างๆ เป็น components เพื่อให้สามารถนำกลับมาใช้ใหม่ได้
+        </li>
+        <li class="li-body">
+          ใช้ Mongoose กับ MongoDB เพื่อให้ข้อมูลที่เข้าสู่ database มี pattern
+          และ type ที่ถูกต้อง
+        </li>
+      </ul>
+      <h3>4.Real-Time Data Updates:</h3>
+      <ul class="ul-body">
+        <li class="li-body">
+          ดึงและแสดงข้อมูลแผ่นดินไหวใกล้เคียง real-time โดยการใช้
+          <span class="line-code">useEffect</span> ใน React ในการเรียก API
+        </li>
+      </ul>
+      <h3>5.Leveraging React-Leaflet for Mapping</h3>
+      <ul class="ul-body">
+        <li class="li-body">
+          <span style="font-weight: bold">How React-Leaflet Works:</span>
+          React-Leaflet เป็น library ที่ทำให้เราสามารถเรียกใช้ library Leaflet
+          ในรูปแบบ components ของ React ได้ โดย Leaflet เป็น library ที่แสดง map
+          จาก OpenStreetMap ซึ่งเป็น open source มาแสดงผลได้ ฟีเจอร์ของ Leaflet
+          อย่าง <span class="line-code">MapContainer</span> จะเป็นตัวกำหนดว่า
+          map จะแสดงผลตรงไหน และ
+          <span class="line-code">Marker</span> จะให้เราสามารถนำ marker
+          ไปไว้จุดที่เราต้องการบน map ได้ รวมถึงเมื่อใช้ร่วมกับ
+          <span class="line-code">CustomIcon</span>
+          จะทำให้เราสามารถออกแบบ marker ได้เองโดยใช้ css หรือ svg
+        </li>
+        <li class="li-body">Advantages:</li>
+        <ul class="ul-body">
+          <li class="li-body">
+            Declarative Mapping: React-Leaflet ช่วยให้สามารถจัดการกับ map
+            ได้ง่ายขึ้น รวมถึงเมื่อมีข้อมูลใหม่หรือมีการเปลี่ยนแปลงเข้ามาตัว map
+            ก็จะ update ตัวเองได้ทันที ทำให้ user รู้สึกลื่นไหลในการใช้งาน
+          </li>
+          <li class="li-body">
+            Customization: สามารถกำหนด จัดการและตกแต่ง Marker
+            ได้อย่างอิสระเพื่อให้ Marker
+            มีความหลากหลายและเพิ่มประสบการณ์ใช้งานของ user ขึ้น
+          </li>
+        </ul>
+        <li class="li-body">Development Approach:</li>
+        <ul class="ul-body">
+          <li class="li-body">
+            <span class="line-code">MapContainer</span> จะเป็น layer
+            ที่เป็นข้อมูลพื้นฐานที่แผนที่ควรมี
+          </li>
+          <li class="li-body">
+            <span class="line-code">Marker</span> และ
+            <span class="line-code">Popup</span>
+            จะแสดงข้อมูลสถานที่เกิดแผ่นดินไหวในรูปแบบของ วงกลมและมีคลื่นล้อมรอบ
+            ในตำแหน่งที่เกิดแผ่นดินไหว โดย วงกลมและคลื่นล้อมรอบ
+            จะแตกต่างกันไปตามขนาดความรุนแรงของแผ่นดินไหว และเมื่อ click
+            ที่จุดที่เกิดแผ่นดินไหวก็จะแสดงข้อมูลของแผ่นดินไหวทั้งหมด
+          </li>
+        </ul>
+      </ul>
+      <h2 id="important-apis">Important APIs</h2>
+      <hr />
+      <h3>1.USGS Earthquake API</h3>
+      <ul class="ul-body">
+        <li class="li-body">
+          ดึงข้อมูลแผ่นดินไหว, สถานที่, ความรุนแรง, ความลึก และ ช่วงเวลาแบบ
+          real-time จาก USGS Earthquake API (สำนักสำรวจธรณีวิทยาสหรัฐอเมริกา)
+        </li>
+        <li class="li-body">
+          URL:
+          <span class="line-code"
+            >https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2024-01-01&endtime=2024-01-02</span
+          >
+        </li>
+      </ul>
+      <h3>2.Local MongoDB via Docker</h3>
+      <ul class="ul-body">
+        <li class="li-body">
+          ส่ง GET Request ไปที่
+          <span class="line-code">/api/earthquake</span> โดย query ด้วย
+          <span class="line-code">start</span> และ
+          <span class="line-code">end</span>
+        </li>
+        <li class="li-body">
+          backend จะทำการ query ใน MongoDB และตอบกลับในรูป
+          <span class="line-code">geojson</span>
+        </li>
+      </ul>
+      <h2 id="deployment-methods">Deployment Methods</h2>
+      <hr />
+      <h2 style="font-size: 1.2rem">Docker Multi-Stage Build Explained</h2>
+      <h3>1.Frontend (Vite Build)</h3>
+      <p class="p-in">
+        frontend จะใช้วิธี Vite build เพื่อทำการเปลี่ยนจาก tsx เป็น js
+        ปกติเพื่อให้ browser ทั่วไปสามารถเข้าใจได้ :
+      </p>
+      <ul class="ul-body">
+        <li class="li-body">
+          ทำการ copyไฟล์ package.json ( และ package-lock.json หรือ bun.lockb
+          ถ้ามี) และ ทำการติดตั้ง dependencies โดยเหตุผลที่ไม่ทำการ copy
+          ไฟล์ทั้งหมดแล้วติดตั้ง dependencies เพราะ Docker จะทำ layer caching
+          เมื่อไฟล์เปลี่ยนแปลงไป วิธีนี้จะเป็นการ optimize Docker layer caching
+          ซึ่งทำให้ สามารถ build ได้เร็วขึ้นอย่างมีนัยสําคัญ
+        </li>
+      </ul>
+      <p class="p-in">Dockerfile Excerpt for Frontend Build:</p>
+      <pre><code class="docker"># Stage 1: Build the Vite frontend
+FROM oven/bun AS frontend-builder
+        
+WORKDIR /app/frontend
+        
+# Install frontend dependencies
+COPY frontend/package.json ./
+RUN bun install
+        
+# Copy all frontend files and build the statices
+COPY frontend/ .
+RUN bun run build
+      </code></pre>
+      <p class="p-in">
+        หลังจากทำการ Vite build เสร็จไฟล์ที่ได้ก็จะไปอยู่ใน folder dist
+        รอส่งต่อให้ backend ดำเนินการขั้นต่อไป
+      </p>
+      <h3>2.Backend (Express and Static File Serving)</h3>
+      <p class="p-in">
+        backend จะใช้ Express.js ร่วมกับ bun เพื่อให้บริการ API และ
+        ไฟล์ที่ผ่านการ build จาก frontend
+      </p>
+      <ul class="ul-body">
+        <li class="li-body">ทำการติดตั้ง dependencies ที่จำเป็นทั้งหมด</li>
+        <li class="li-body">
+          นำไฟล์ที่ได้จากการ build ของ frontend มาใส่ใน folder public ของ
+          backend เพื่อให้สามารถนำไฟล์มาใช้งานได้
+        </li>
+      </ul>
+      <p class="p-in">Dockerfile Excerpt for Backend Setup:</p>
+      <pre><code class="docker"># Stage 2: Set up the Express backend and bundle the Vite build
+FROM oven/bun AS backend
+        
+WORKDIR /app
+        
+# Install backend dependencies for production
+COPY backend/package.json backend/package-lock.json ./
+RUN bun install --production
+        
+# Copy backend code and built frontend assets
+COPY backend/ .
+COPY --from=frontend-builder /app/frontend/dist ./public
+        
+# Expose port and set the start command
+EXPOSE 3000
+CMD ["bun", "server.js"]
+      </code>
+      </pre>
+      <h2 style="font-size: 1.2rem">Using Docker Compose</h2>
+      <h3>1.Setup Docker Compose:</h3>
+      <p class="p-in">
+        ตรวจสอบให้แน่ใจว่าได้ติดตั้ง <span class="line-code">docker</span> และ
+        <span class="line-code">docker-compose</span> ไว้ในเครื่องของท่านแล้ว
+      </p>
+      <h3>2.Create <span class="line-code">docker-compose.yml</span>:</h3>
+      <p class="p-in">
+        ตรวจสอบให้แน่ใจว่าไฟล์
+        <span class="line-code">docker-compose.yml</span> ของท่าน config
+        ได้อย่างถูกต้องเพื่อให้ทำงานได้อย่างถูกต้องดังนี้:
+      </p>
+      <pre><code class="docker">
+services:
+ app:
+   build:
+     context: .
+     target: backend
+   environment:
+     NODE_ENV: production
+     MONGO_URI: mongodb://mongo:27017/earthquake  # Internal MongoDB connection
+   ports:
+     - 80:3000
+   depends_on:
+     - mongo
+   networks:
+     - app-network
+   restart: unless-stopped
+
+ mongo:
+   image: mongo:8.0.3
+   volumes:
+     - mongo-data:/data/db 
+   networks:
+     - app-network
+   restart: unless-stopped
+
+ volumes:
+   mongo-data:
+ 
+ networks:
+   app-network:
+     driver: bridge
+      </code></pre>
+      <h3>3.Run the Application:</h3>
+      <p class="p-in">เข้าไปใน project directory และใช้ command นี้</p>
+      <pre><code class="docker">docker-compose up</code></pre>
+      <h3>
+        4.Access the App: <span class="line-code">http://localhost:80</span>
+      </h3>
+      <h3>5.Stop Services:</h3>
+      <pre><code class="docker">docker-compose down</code></pre>
+      <h3>6.Persist Data:</h3>
+      <p class="p-in">
+        ข้อมูลใน MongoDB จะถูกเก็บไว้ใน
+        <span class="line-code">mongo-data</span> เพื่อให้แน่ใจว่าเมื่อ restart
+        container แล้วข้อมูลจะยังอยู่
+      </p>
+      <h2 id="technologies-used">Technologies Used</h2>
+      <hr />
+      <ul>
+        <li style="font-size: 1.5em">
+          <span style="font-weight: bold">Frontend</span>: React, React-Leaflet,
+          Vite
+        </li>
+        <li style="font-size: 1.5em">
+          <span style="font-weight: bold">Backend</span>: Express.js, Bun
+        </li>
+        <li style="font-size: 1.5em">
+          <span style="font-weight: bold">Database</span>: MongoDB with Mongoose
+        </li>
+        <li style="font-size: 1.5em">
+          <span style="font-weight: bold">Deployment</span>: Docker Compose
+        </li>
+        <li style="font-size: 1.5em">
+          <span style="font-weight: bold">Animation</span>: CSS animations
+        </li>
+      </ul>
+      <h2 id="license">License</h2>
+      <hr />
+      <p class="p-in">This project is licensed under the MIT License.</p>
+      <p class="p-in">
+        application นี้เป็นส่วนหนึ่งของวิชา CT648 Web and Cloud Engineering
+      </p>
+      <p class="p-in">
+        วิศวกรรมศาสตรมหาบัณฑิต สาขาวิชาวิศวกรรมคอมพิวเตอร์
+        มหาวิทยาลัยธุรกิจบัณฑิตย์ (Master of Engineering Program in Computer
+        Engineering, Dhurakij Pundit University)
+      </p>
+      <p class="p-in">66130423 ปราชญา ป้องกัน</p>
+      <p class="p-in">อาจารย์ที่ปรึกษา ผศ.ดร.ชัยพร เขมะภาตะพันธ์</p>
+      <img
+        src="https://cite.dpu.ac.th/img/logo-cite-edit.jpg?t=1"
+        alt="CITE"
+        width="270"
+        height="187"
+      />
+    </div>
+  </body>
+</html>

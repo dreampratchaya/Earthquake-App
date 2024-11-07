@@ -1,0 +1,108 @@
+html {
+  scroll-behavior: smooth;
+}
+body {
+  height: 100vh;
+  background-color: #212121;
+  background-size: cover;
+  background-position: center;
+  text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  margin: 0 0;
+}
+
+.aboutCenter {
+  display: flex;
+  color: white;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homeNav {
+  display: flex;
+  align-items: center;
+  width: 70%;
+  margin-top: 3em;
+}
+
+.homeLink {
+  padding-top: 15px;
+  font-weight: 700;
+  font-size: 1.5em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-left: 2rem;
+  border-bottom: 0.25rem solid transparent;
+  text-decoration: none;
+}
+
+.homeLink:hover {
+  color: rgba(255, 255, 255, 0.5);
+  border-bottom-color: rgba(255, 255, 255, 0.5);
+}
+
+.homeLink.active {
+  color: white;
+  border-bottom-color: white;
+}
+
+.container {
+  color: white;
+  margin: 5em 16.7% 0 16.7%;
+}
+
+.container p {
+  font-size: 1.3rem;
+  line-height: 2.5rem;
+}
+
+.container h2 {
+  font-size: 1.7rem;
+}
+
+.container ul a {
+  font-size: 1.1rem;
+  line-height: 2rem;
+  text-decoration: none;
+  color: #007bff;
+}
+
+.container ul a:hover {
+  text-decoration: underline;
+}
+
+.container h3 {
+  text-indent: 1rem;
+}
+
+.container .ul-body {
+  list-style-position: outside;
+}
+
+.container .li-body {
+  line-height: 2rem;
+  font-size: 1.2rem;
+}
+
+.line-code {
+  background-color: #383838;
+  padding: 1px 3px;
+  border-radius: 9px;
+}
+
+.p-in {
+  text-indent: 1rem;
+}
+
+pre {
+  background-color: #151b23;
+  padding: 15px;
+  border-radius: 5px;
+  overflow-x: auto;
+  font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+}
+.docker {
+  font-size: 1.5em;
+  color: #ffffff;
+}
