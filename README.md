@@ -192,5 +192,5 @@ This project is licensed under the MIT License.
 application นี้เป็นส่วนหนึ่งของวิชา CT648 Web and Cloud Engineering <br>
 วิศวกรรมศาสตรมหาบัณฑิต สาขาวิชาวิศวกรรมคอมพิวเตอร์ มหาวิทยาลัยธุรกิจบัณฑิตย์ (Master of Engineering Program in Computer Engineering, Dhurakij Pundit University) <br>
 66130423 ปราชญา ป้องกัน <br>
-อาจารย์ที่ปรึกษา ผศ.ดร.ชัยพร เขมะภาตะพันธ์ <br>
+<a href="https://cite.dpu.ac.th/ResumeDean.html">อาจารย์ที่ปรึกษา ผศ.ดร.ชัยพร เขมะภาตะพันธ์</a> <br>
 <img src="https://cite.dpu.ac.th/img/logo-cite-edit.jpg?t=1" alt="CITE" width="180" height="125" />

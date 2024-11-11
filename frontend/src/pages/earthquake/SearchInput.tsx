@@ -1,8 +1,9 @@
 import TextField from "@mui/material/TextField";
 import SearchIcon from "@mui/icons-material/Search";
-import { IconButton } from "@mui/material";
+import { IconButton, Button } from "@mui/material";
 import { InputAdornment } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 
 const darkTheme = createTheme({
   palette: {
@@ -57,6 +58,25 @@ const SearchInput: React.FC<{
             },
           }}
         />
+        <Button
+          sx={{
+            marginLeft: "10px",
+            fontSize: "1.3rem",
+            marginTop: "3px",
+            borderRadius: "15px",
+            borderColor: "rgba(255, 255, 255, 0.5)",
+            color: "rgba(255, 255, 255, 0.5)",
+            "&:hover": {
+              borderColor: "rgba(255, 255, 255, 0.7)",
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+            },
+          }}
+          variant="outlined"
+          component={Link}
+          to="/"
+        >
+          Home
+        </Button>
       </ThemeProvider>
     </form>
   );
