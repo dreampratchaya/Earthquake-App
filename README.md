@@ -124,7 +124,7 @@
      | `{x}` | Tile column number (integer). แสดงถึงตำแหน่งแนวนอน|
      | `{y}` | Tile row number (integer). แสดงถึงตำแหน่งแนวตั้ง |
      | `{r}` | Optional retina indicator. ใช้ `@2x` สำหรับ high-DPI tiles (e.g., Retina displays). เว้นว่างไว้สำหรับ standard tiles. |
-   - **Example Respond**
+   - **Example Respond**<br>
      <img src="https://a.basemaps.cartocdn.com/dark_all/3/4/2@2x.png" alt="Map" width="200" height="200" />
 
 3. **Local MongoDB via Docker**
