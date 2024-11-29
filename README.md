@@ -50,8 +50,84 @@
 
    - ดึงข้อมูลแผ่นดินไหว, สถานที่, ความรุนแรง, ความลึก และ ช่วงเวลาแบบ real-time จาก USGS Earthquake API (สำนักสำรวจธรณีวิทยาสหรัฐอเมริกา)
    - **URL**: `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2024-01-01&endtime=2024-01-02`
+   - **Example Response**
 
-2. **Local MongoDB via Docker**
+   ```json
+   "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "mag": 4.9,
+                "place": "191 km ESE of Ust’-Kamchatsk Staryy, Russia",
+                "time": 1731369384328,
+                "updated": 1731370895040,
+                "tz": null,
+                "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000nra5",
+                "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000nra5&format=geojson",
+                "felt": null,
+                "cdi": null,
+                "mmi": null,
+                "alert": null,
+                "status": "reviewed",
+                "tsunami": 0,
+                "sig": 369,
+                "net": "us",
+                "code": "7000nra5",
+                "ids": ",usauto7000nra5,us7000nra5,",
+                "sources": ",usauto,us,",
+                "types": ",internal-moment-tensor,origin,phase-data,",
+                "nst": 86,
+                "dmin": 4.818,
+                "rms": 1.08,
+                "gap": 100,
+                "magType": "mb",
+                "type": "earthquake",
+                "title": "M 4.9 - 191 km ESE of Ust’-Kamchatsk Staryy, Russia"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    165.4283,
+                    55.7619,
+                    10
+                ]
+            },
+            "id": "us7000nra5"
+        }
+    ],
+   ```
+
+   - **Response Fields**
+   - `features`: รายการเหตุการณ์แผ่นดินไหว
+     - `type`: Always `"Feature"`.
+     - `properties`: ลายละเอียดข้อมูลแผ่นดินไหว
+       - `mag`: ขนาดของแผ่นดินไหว
+       - `place`: คำอธิบายสถานที่
+       - `time`: Timestamp ของแผ่นดินไหว (milliseconds)
+       - `updated`: Timestamp ที่ update ล่าสุด
+       - `url`: Link สำหรับข้อมูลเพิ่มเติม
+       - `tsunami`: แผ่นดินไหวทำให้เกิดสึนามิหรือไม่ (`1` for yes, `0` for no)
+     - `geometry`: ข้อมูลทางภูมิศาสตร์ของแผ่นดินไหว (`geojson`)
+       - `type`: Always `"Point"`.
+       - `coordinates`: Longitude, latitude, and depth (kilometers).
+     - `id`: Unique identifier for the event.
+
+2. **Basemaps API**
+
+   - เป็น API สำหรับดึง map tiles ในรูปแบบ PNG สำหรับ Leaflet
+   - **URL**: _Dark-Mode_: `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png`, _Light-Mode_: `https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png`
+   - **URL Parameters**
+     | Parameter | Description |
+     |-------------|------------------------------------------------------------------|
+     | `{s}` | Subdomain สำหรับ load balancing. Options: `a`, `b`, `c`, `d`. |
+     | `{z}` | Zoom level (integer). แสดงถึงขนาดการซูมของแผนที่ |
+     | `{x}` | Tile column number (integer). แสดงถึงตำแหน่งแนวนอน|
+     | `{y}` | Tile row number (integer). แสดงถึงตำแหน่งแนวตั้ง |
+     | `{r}` | Optional retina indicator. ใช้ `@2x` สำหรับ high-DPI tiles (e.g., Retina displays). เว้นว่างไว้สำหรับ standard tiles. |
+   - **Example Respond**
+     <img src="https://a.basemaps.cartocdn.com/dark_all/3/4/2@2x.png" alt="Map" width="200" height="200" />
+
+3. **Local MongoDB via Docker**
    - ส่ง GET Request ไปที่ `/api/earthquake` โดย query ด้วย `start` และ `end`
    - backend จะทำการ query ใน MongoDB และตอบกลับในรูป `geojson`
 

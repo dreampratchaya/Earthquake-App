@@ -127,8 +127,163 @@
             >https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2024-01-01&endtime=2024-01-02</span
           >
         </li>
+        <li class="li-body">Example Response</li>
+        <pre><code class="docker" style="font-size: 1rem;">"features": [
+          {
+              "type": "Feature",
+              "properties": {
+                  "mag": 4.9,
+                  "place": "191 km ESE of Ust’-Kamchatsk Staryy, Russia",
+                  "time": 1731369384328,
+                  "updated": 1731370895040,
+                  "tz": null,
+                  "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000nra5",
+                  "detail": "https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us7000nra5&format=geojson",
+                  "felt": null,
+                  "cdi": null,
+                  "mmi": null,
+                  "alert": null,
+                  "status": "reviewed",
+                  "tsunami": 0,
+                  "sig": 369,
+                  "net": "us",
+                  "code": "7000nra5",
+                  "ids": ",usauto7000nra5,us7000nra5,",
+                  "sources": ",usauto,us,",
+                  "types": ",internal-moment-tensor,origin,phase-data,",
+                  "nst": 86,
+                  "dmin": 4.818,
+                  "rms": 1.08,
+                  "gap": 100,
+                  "magType": "mb",
+                  "type": "earthquake",
+                  "title": "M 4.9 - 191 km ESE of Ust’-Kamchatsk Staryy, Russia"
+              },
+              "geometry": {
+                  "type": "Point",
+                  "coordinates": [
+                      165.4283,
+                      55.7619,
+                      10
+                  ]
+              },
+              "id": "us7000nra5"
+          }
+      ],
+        </code></pre>
+        <li class="li-body">Response Fields</li>
+        <li class="li-body">
+          <span class="line-code">features</span>: รายการเหตุการณ์แผ่นดินไหว
+        </li>
+        <ul class="ul-body">
+          <li class="li-body">
+            <span class="line-code">type</span>: Always "Feature"
+          </li>
+          <li class="li-body">
+            <span class="line-code">properties</span>:
+            ลายละเอียดข้อมูลแผ่นดินไหว
+          </li>
+          <ul class="ul-body">
+            <li class="li-body">
+              <span class="line-code">mag</span>: ขนาดของแผ่นดินไหว
+            </li>
+            <li class="li-body">
+              <span class="line-code">place</span>: คำอธิบายสถานที่
+            </li>
+            <li class="li-body">
+              <span class="line-code">time</span>: Timestamp ของแผ่นดินไหว
+              (milliseconds)
+            </li>
+            <li class="li-body">
+              <span class="line-code">updated</span>: Timestamp ที่ update
+              ล่าสุด
+            </li>
+            <li class="li-body">
+              <span class="line-code">url</span>: Link สำหรับข้อมูลเพิ่มเติม
+            </li>
+            <li class="li-body">
+              <span class="line-code">tsunami</span>:
+              แผ่นดินไหวทำให้เกิดสึนามิหรือไม่ (1 for yes, 0 for no)
+            </li>
+          </ul>
+          <li class="li-body">
+            <span class="line-code">geometry</span>:
+            ข้อมูลทางภูมิศาสตร์ของแผ่นดินไหว (geojson)
+          </li>
+          <ul class="ul-body">
+            <li class="li-body">
+              <span class="line-code">type</span>: Always "Point"
+            </li>
+            <li class="li-body">
+              <span class="line-code">coordinates</span>: Longitude, latitude,
+              and depth (kilometers).
+            </li>
+          </ul>
+          <li class="li-body">
+            <span class="line-code">id</span>: Unique identifier for the event.
+          </li>
+        </ul>
       </ul>
-      <h3>2.Local MongoDB via Docker</h3>
+      <h3>2.Basemaps API</h3>
+      <ul class="ul-body">
+        <li class="li-body">
+          เป็น API สำหรับดึง map tiles ในรูปแบบ PNG สำหรับ Leaflet
+        </li>
+        <li class="li-body">
+          <span class="line-code">URL</span>: Dark-Mode:
+          <span class="line-code"
+            >https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png</span
+          >, Light-Mode:
+          <span class="line-code"
+            >https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png</span
+          >
+        </li>
+        <li class="li-body">URL Parameters</li>
+        <table>
+          <thead>
+            <tr>
+              <th>Parameter</th>
+              <th style="text-align: left">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>{s}</code></td>
+              <td>
+                Subdomain สำหรับ load balancing. Options: <code>a</code>,
+                <code>b</code>, <code>c</code>, <code>d</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>{z}</code></td>
+              <td>Zoom level (integer). แสดงถึงขนาดการซูมของแผนที่</td>
+            </tr>
+            <tr>
+              <td><code>{x}</code></td>
+              <td>Tile column number (integer). แสดงถึงตำแหน่งแนวนอน</td>
+            </tr>
+            <tr>
+              <td><code>{y}</code></td>
+              <td>Tile row number (integer). แสดงถึงตำแหน่งแนวตั้ง</td>
+            </tr>
+            <tr>
+              <td><code>{r}</code></td>
+              <td>
+                Optional retina indicator. ใช้ <code>@2x</code> สำหรับ high-DPI
+                tiles (e.g., Retina displays). เว้นว่างไว้สำหรับ standard tiles.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <li class="li-body">Example Respond</li>
+        <img
+          src="https://a.basemaps.cartocdn.com/dark_all/3/4/2@2x.png"
+          alt="Map"
+          width="300"
+          height="300"
+        />
+      </ul>
+      <h3>3.Local MongoDB via Docker</h3>
       <ul class="ul-body">
         <li class="li-body">
           ส่ง GET Request ไปที่
@@ -296,7 +451,14 @@ services:
         มหาวิทยาลัยธุรกิจบัณฑิตย์ (Master of Engineering Program in Computer
         Engineering, Dhurakij Pundit University)
       </p>
-      <p class="p-in">66130423 ปราชญา ป้องกัน</p>
+      <p class="p-in">
+        66130423 ปราชญา ป้องกัน
+        <a
+          style="color: #007bff"
+          href="https://github.com/dreampratchaya/Earthquake-App"
+          >Github</a
+        >
+      </p>
       <p class="p-in">
         <a style="color: #007bff" href="https://cite.dpu.ac.th/ResumeDean.html"
           >อาจารย์ที่ปรึกษา ผศ.ดร.ชัยพร เขมะภาตะพันธ์</a
